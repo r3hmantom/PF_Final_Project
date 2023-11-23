@@ -9,7 +9,7 @@ const int defaultColsF = 5;
 // BOARD FUNCTIONS
 
 // Initializing Board
-void initBoard(int board[][defaultColsF],int ROWS, int COLS,int PLAYER1,int PLAYER2,int EMPTY) {
+void initBoard(int board[][defaultColsF], int ROWS, int COLS, int PLAYER1, int PLAYER2, int EMPTY) {
 
 	// INITIALIZING PLAYER 1
 
@@ -54,11 +54,11 @@ void displayBoard(int board[][defaultColsF], int ROWS, int COLS) {
 // MOVING BEADS IN AXIS
 
 // Right
-void moveRight(int curPosition[][defaultColsF], int curR, int curC , int EMPTY) {
+void moveRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
 
 	// If one position right is opposite player and two position right is empty
 	// then current position is moved to/with two position right and make one position to right empty and current position empty
-	if (curPosition[curR][curC + 1] == (curPosition[curR][curC] * -1 ) && curPosition[curR][curC + 2] == EMPTY) {
+	if (curPosition[curR][curC + 1] == (curPosition[curR][curC] * -1) && curPosition[curR][curC + 2] == EMPTY) {
 		// moving current bead to 2 position left
 		curPosition[curR][curC + 2] = curPosition[curR][curC];
 		// killing opposite person bead
@@ -155,6 +155,17 @@ void moveBottom(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) 
 // Upper Right
 void upperRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
 
+	// If one position top right is opposite player and two position top right is empty
+	// then current position is moved to/with two position top and make one position to top empty and current position empty
+	if (curPosition[curR - 1][curC + 1] == (curPosition[curR][curC] * -1) && curPosition[curR - 2][curC + 2] == EMPTY) {
+		// moving current bead to 2 position top right
+		curPosition[curR - 2][curC + 2] = curPosition[curR][curC];
+		// killing opposite person bead
+		curPosition[curR - 1][curC + 1] = EMPTY;
+		// setting previous position to empty
+		curPosition[curR][curC] = EMPTY;
+	}
+
 	if (curPosition[curR - 1][curC + 1] == EMPTY) {
 		// If right  position is empty, then make current position empty and move current position to +1 on right side
 		curPosition[curR - 1][curC + 1] = curPosition[curR][curC];
@@ -165,6 +176,16 @@ void upperRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) 
 
 // Upper Left
 void upperLeft(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
+	// If one position top left is opposite player and two position top left is empty
+	// then current position is moved to/with two position top left and make one position to top left empty and current position empty
+	if (curPosition[curR - 1][curC - 1] == (curPosition[curR][curC] * -1) && curPosition[curR - 2][curC - 2] == EMPTY) {
+		// moving current bead to 2 position top
+		curPosition[curR - 2][curC - 2] = curPosition[curR][curC];
+		// killing opposite person bead
+		curPosition[curR - 1][curC - 1] = EMPTY;
+		// setting previous position to empty
+		curPosition[curR][curC] = EMPTY;
+	}
 
 	if (curPosition[curR - 1][curC - 1] == EMPTY) {
 		// If right  position is empty, then make current position empty and move current position to +1 on right side
@@ -177,6 +198,17 @@ void upperLeft(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
 // Lower Right
 void lowerRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
 
+	// If one position bottom right is opposite player and two bottom right is empty
+	// then current position is moved to/with two position bottom right and make one position to bottom right empty and current position empty
+	if (curPosition[curR + 1][curC + 1] == (curPosition[curR][curC] * -1) && curPosition[curR + 2][curC + 2] == EMPTY) {
+		// moving current bead to 2 bottom right
+		curPosition[curR + 2][curC + 2] = curPosition[curR][curC];
+		// killing opposite person bead
+		curPosition[curR + 1][curC + 1] = EMPTY;
+		// setting previous position to empty
+		curPosition[curR][curC] = EMPTY;
+	}
+
 	if (curPosition[curR + 1][curC + 1] == EMPTY) {
 		// If right  position is empty, then make current position empty and move current position to +1 on right side
 		curPosition[curR + 1][curC + 1] = curPosition[curR][curC];
@@ -186,7 +218,18 @@ void lowerRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) 
 }
 
 // Lower Left
-void loweLeft(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
+void lowerLeft(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
+
+	// If one position lower left is opposite player and two position lower left is empty
+	// then current position is moved to/with two position lower left and make one position to lower left empty and current position empty
+	if (curPosition[curR + 1][curC - 1] == (curPosition[curR][curC] * -1) && curPosition[curR + 2][curC - 2] == EMPTY) {
+		// moving current bead to 2 position lower left
+		curPosition[curR + 2][curC - 2] = curPosition[curR][curC];
+		// killing opposite person bead
+		curPosition[curR + 1][curC - 1] = EMPTY;
+		// setting previous position to empty
+		curPosition[curR][curC] = EMPTY;
+	}
 
 	if (curPosition[curR + 1][curC - 1] == EMPTY) {
 		// If right  position is empty, then make current position empty and move current position to +1 on right side
