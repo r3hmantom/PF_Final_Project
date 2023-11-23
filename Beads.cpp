@@ -167,7 +167,7 @@ void upperRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) 
 	}
 
 	if (curPosition[curR - 1][curC + 1] == EMPTY) {
-		// If right  position is empty, then make current position empty and move current position to +1 on right side
+		// If top right position is empty, then make current position empty and move current position to +1 on top right side
 		curPosition[curR - 1][curC + 1] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
 	}
@@ -188,7 +188,7 @@ void upperLeft(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
 	}
 
 	if (curPosition[curR - 1][curC - 1] == EMPTY) {
-		// If right  position is empty, then make current position empty and move current position to +1 on right side
+		// If top left  position is empty, then make current position empty and move current position to +1 on top left side
 		curPosition[curR - 1][curC - 1] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
 	}
@@ -210,7 +210,7 @@ void lowerRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) 
 	}
 
 	if (curPosition[curR + 1][curC + 1] == EMPTY) {
-		// If right  position is empty, then make current position empty and move current position to +1 on right side
+		// If lower right  position is empty, then make current position empty and move current position to +1 on lower right side
 		curPosition[curR + 1][curC + 1] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
 	}
@@ -232,7 +232,7 @@ void lowerLeft(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
 	}
 
 	if (curPosition[curR + 1][curC - 1] == EMPTY) {
-		// If right  position is empty, then make current position empty and move current position to +1 on right side
+		// If lower left  position is empty, then make current position empty and move current position to 1 on lower left on right side
 		curPosition[curR][curC - 1] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
 	}
