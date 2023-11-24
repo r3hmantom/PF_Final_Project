@@ -17,12 +17,18 @@ const int WIN_STATE = 0;
 
 
 
-//void moveBeadRight()
 
 
 int main() {
 	int board[ROWS][COLS];
 	initBoard(board, ROWS, COLS, PLAYER1, PLAYER2, EMPTY);
+
+	displayBoard(board, ROWS, COLS);
+	cout << endl << endl;
+
+
+	moveBottom(board, 1, 2, EMPTY);
+
 	displayBoard(board, ROWS, COLS);
 
 

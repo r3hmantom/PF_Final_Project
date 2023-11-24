@@ -149,7 +149,7 @@ void moveBottom(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) 
 
 	if (curPosition[curR + 1][curC] == EMPTY) {
 		// If bottom position is empty, then make current position empty and move current position to 1 on bottom side
-		curPosition[curR][curC + 1] = curPosition[curR][curC];
+		curPosition[curR + 1][curC] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
 	}
 
