@@ -229,9 +229,7 @@ void lowerRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) 
 
 // Lower Left
 void lowerLeft(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
-
 	// If one position lower left is opposite player and two position lower left is empty
-	// then current position is moved to/with two position lower left and make one position to lower left empty and current position empty
 	if (curPosition[curR + 1][curC - 1] == (curPosition[curR][curC] * -1) && curPosition[curR + 2][curC - 2] == EMPTY) {
 		// moving current bead to 2 position lower left
 		curPosition[curR + 2][curC - 2] = curPosition[curR][curC];
@@ -240,14 +238,13 @@ void lowerLeft(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
 		// setting previous position to empty
 		curPosition[curR][curC] = EMPTY;
 	}
-
-	if (curPosition[curR + 1][curC - 1] == EMPTY) {
-		// If lower left  position is empty, then make current position empty and move current position to 1 on lower left on right side
-		curPosition[curR][curC - 1] = curPosition[curR][curC];
+	else if (curPosition[curR + 1][curC - 1] == EMPTY) {
+		// If lower left position is empty, then move current position to lower left
+		curPosition[curR + 1][curC - 1] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
 	}
-
 }
+
 
 // --------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------
