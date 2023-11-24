@@ -67,37 +67,29 @@ void handleSelectionAndMovement(int board[ROWS][COLS], int gridX, int gridY, int
     else {
         // Perform movement based on the position clicked
         if (gridY == selectedRow && gridX == selectedCol + 1) {
-            moveRight(board, selectedRow, selectedCol, EMPTY);
-            moveMade = true;
+            moveRight(board, selectedRow, selectedCol, EMPTY, moveMade);
         }
         else if (gridY == selectedRow && gridX == selectedCol - 1) {
-            moveLeft(board, selectedRow, selectedCol, EMPTY);
-            moveMade = true;
+            moveLeft(board, selectedRow, selectedCol, EMPTY, moveMade);
         }
         else if (gridX == selectedCol && gridY == selectedRow + 1) {
-            moveBottom(board, selectedRow, selectedCol, EMPTY);
-            moveMade = true;
+            moveBottom(board, selectedRow, selectedCol, EMPTY, moveMade);
         }
         else if (gridX == selectedCol && gridY == selectedRow - 1) {
-            moveTop(board, selectedRow, selectedCol, EMPTY);
-            moveMade = true;
+            moveTop(board, selectedRow, selectedCol, EMPTY, moveMade);
         }
         // Diagonal movement checks
         else if (gridX == selectedCol + 1 && gridY == selectedRow - 1) {
-            upperRight(board, selectedRow, selectedCol, EMPTY);
-            moveMade = true;
+            upperRight(board, selectedRow, selectedCol, EMPTY, moveMade);
         }
         else if (gridX == selectedCol - 1 && gridY == selectedRow - 1) {
-            upperLeft(board, selectedRow, selectedCol, EMPTY);
-            moveMade = true;
+            upperLeft(board, selectedRow, selectedCol, EMPTY, moveMade);
         }
         else if (gridX == selectedCol + 1 && gridY == selectedRow + 1) {
-            lowerRight(board, selectedRow, selectedCol, EMPTY);
-            moveMade = true;
+            lowerRight(board, selectedRow, selectedCol, EMPTY, moveMade);
         }
         else if (gridX == selectedCol - 1 && gridY == selectedRow + 1) {
-            lowerLeft(board, selectedRow, selectedCol, EMPTY);
-            moveMade = true;
+            lowerLeft(board, selectedRow, selectedCol, EMPTY, moveMade);
         }
 
         // Reset selection

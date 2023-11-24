@@ -61,7 +61,7 @@ void displayBoard(int board[][defaultColsF], int ROWS, int COLS) {
 // MOVING BEADS IN AXIS
 
 // Right
-void moveRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
+void moveRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY, bool& moveMade) {
 
 	// If one position right is opposite player and two position right is empty
 	// then current position is moved to/with two position right and make one position to right empty and current position empty
@@ -72,20 +72,22 @@ void moveRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
 		curPosition[curR][curC + 1] = EMPTY;
 		// setting previous position to empty
 		curPosition[curR][curC] = EMPTY;
-	}
+		moveMade = true;
+		}
 
 	if (curPosition[curR][curC + 1] == EMPTY) {
 		// If right  position is empty, then make current position empty and move current position to +1 on right side
 		curPosition[curR][curC + 1] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
-	}
+		moveMade = true;
+		}
 
 
 
 }
 
 // Left
-void moveLeft(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
+void moveLeft(int curPosition[][defaultColsF], int curR, int curC, int EMPTY, bool& moveMade) {
 
 	// If one position left is opposite player and two position left is empty
 	// then current position is moved to/with two position left and make one position to left empty and current position empty
@@ -96,19 +98,21 @@ void moveLeft(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
 		curPosition[curR][curC - 1] = EMPTY;
 		// setting previous position to empty
 		curPosition[curR][curC] = EMPTY;
-	}
+		moveMade = true;
+		}
 
 
 	if (curPosition[curR][curC - 1] == EMPTY) {
 		// If left  position is empty, then make current position empty and move current position to 1 on left side
 		curPosition[curR][curC - 1] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
-	}
+		moveMade = true;
+		}
 
 }
 
 // Top
-void moveTop(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
+void moveTop(int curPosition[][defaultColsF], int curR, int curC, int EMPTY, bool& moveMade) {
 
 	// If one position top is opposite player and two position top is empty
 	// then current position is moved to/with two position top and make one position to top empty and current position empty
@@ -119,19 +123,21 @@ void moveTop(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
 		curPosition[curR - 1][curC] = EMPTY;
 		// setting previous position to empty
 		curPosition[curR][curC] = EMPTY;
-	}
+		moveMade = true;
+		}
 
 
 	if (curPosition[curR - 1][curC] == EMPTY) {
 		// If top position is empty, then make current position empty and move current position to 1 on top side
 		curPosition[curR - 1][curC] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
-	}
+		moveMade = true;
+		}
 
 }
 
 // Bottom
-void moveBottom(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
+void moveBottom(int curPosition[][defaultColsF], int curR, int curC, int EMPTY, bool& moveMade) {
 
 	// If one position bottom is opposite player and two position bottom is empty
 	// then current position is moved to/with two position bottom and make one position to bottom empty and current position empty
@@ -142,7 +148,8 @@ void moveBottom(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) 
 		curPosition[curR + 1][curC] = EMPTY;
 		// setting previous position to empty
 		curPosition[curR][curC] = EMPTY;
-	}
+		moveMade = true;
+		}
 
 
 
@@ -151,7 +158,8 @@ void moveBottom(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) 
 		// If bottom position is empty, then make current position empty and move current position to 1 on bottom side
 		curPosition[curR + 1][curC] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
-	}
+		moveMade = true;
+		}
 
 }
 
@@ -163,7 +171,7 @@ void moveBottom(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) 
 // MOVING BEADS DIAGONALLY
 
 // Upper Right
-void upperRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
+void upperRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY, bool& moveMade) {
 
 	// If one position top right is opposite player and two position top right is empty
 	// then current position is moved to/with two position top and make one position to top empty and current position empty
@@ -174,18 +182,20 @@ void upperRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) 
 		curPosition[curR - 1][curC + 1] = EMPTY;
 		// setting previous position to empty
 		curPosition[curR][curC] = EMPTY;
-	}
+		moveMade = true;
+		}
 
 	if (curPosition[curR - 1][curC + 1] == EMPTY) {
 		// If top right position is empty, then make current position empty and move current position to +1 on top right side
 		curPosition[curR - 1][curC + 1] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
-	}
+		moveMade = true;
+		}
 
 }
 
 // Upper Left
-void upperLeft(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
+void upperLeft(int curPosition[][defaultColsF], int curR, int curC, int EMPTY, bool& moveMade) {
 	// If one position top left is opposite player and two position top left is empty
 	// then current position is moved to/with two position top left and make one position to top left empty and current position empty
 	if (curPosition[curR - 1][curC - 1] == (curPosition[curR][curC] * -1) && curPosition[curR - 2][curC - 2] == EMPTY) {
@@ -195,18 +205,20 @@ void upperLeft(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
 		curPosition[curR - 1][curC - 1] = EMPTY;
 		// setting previous position to empty
 		curPosition[curR][curC] = EMPTY;
+		moveMade = true;
 	}
 
 	if (curPosition[curR - 1][curC - 1] == EMPTY) {
 		// If top left  position is empty, then make current position empty and move current position to +1 on top left side
 		curPosition[curR - 1][curC - 1] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
-	}
+		moveMade = true;
+		}
 
 }
 
 // Lower Right
-void lowerRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
+void lowerRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY, bool& moveMade) {
 
 	// If one position bottom right is opposite player and two bottom right is empty
 	// then current position is moved to/with two position bottom right and make one position to bottom right empty and current position empty
@@ -217,18 +229,20 @@ void lowerRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) 
 		curPosition[curR + 1][curC + 1] = EMPTY;
 		// setting previous position to empty
 		curPosition[curR][curC] = EMPTY;
+		moveMade = true;
 	}
 
 	if (curPosition[curR + 1][curC + 1] == EMPTY) {
 		// If lower right  position is empty, then make current position empty and move current position to +1 on lower right side
 		curPosition[curR + 1][curC + 1] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
+		moveMade = true;
 	}
 
 }
 
 // Lower Left
-void lowerLeft(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
+void lowerLeft(int curPosition[][defaultColsF], int curR, int curC, int EMPTY, bool& moveMade) {
 	// If one position lower left is opposite player and two position lower left is empty
 	if (curPosition[curR + 1][curC - 1] == (curPosition[curR][curC] * -1) && curPosition[curR + 2][curC - 2] == EMPTY) {
 		// moving current bead to 2 position lower left
@@ -237,11 +251,13 @@ void lowerLeft(int curPosition[][defaultColsF], int curR, int curC, int EMPTY) {
 		curPosition[curR + 1][curC - 1] = EMPTY;
 		// setting previous position to empty
 		curPosition[curR][curC] = EMPTY;
+		moveMade = true;
 	}
 	else if (curPosition[curR + 1][curC - 1] == EMPTY) {
 		// If lower left position is empty, then move current position to lower left
 		curPosition[curR + 1][curC - 1] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
+		moveMade = true;
 	}
 }
 

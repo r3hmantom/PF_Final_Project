@@ -18,16 +18,16 @@ void displayBoard(int board[][defaultColsH], int ROWS, int COLS);
 // MOVING BEADS IN AXIS
 
 // Right
-void moveRight(int curPosition[][defaultColsH], int curR, int curC, int EMPTY);
+void moveRight(int curPosition[][defaultColsH], int curR, int curC, int EMPTY, bool& moveMade);
 
 // Left
-void moveLeft(int curPosition[][defaultColsH], int curR, int curC, int EMPTY);
+void moveLeft(int curPosition[][defaultColsH], int curR, int curC, int EMPTY, bool& moveMade);
 
 // Top
-void moveTop(int curPosition[][defaultColsH], int curR, int curC, int EMPTY);
+void moveTop(int curPosition[][defaultColsH], int curR, int curC, int EMPTY, bool& moveMade);
 
 // Bottom
-void moveBottom(int curPosition[][defaultColsH], int curR, int curC, int EMPTY);
+void moveBottom(int curPosition[][defaultColsH], int curR, int curC, int EMPTY, bool& moveMade);
 
 // --------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------
@@ -35,16 +35,16 @@ void moveBottom(int curPosition[][defaultColsH], int curR, int curC, int EMPTY);
 // MOVING BEADS DIAGONALLY
 
 // Upper Right
-void upperRight(int curPosition[][defaultColsH], int curR, int curC, int EMPTY);
+void upperRight(int curPosition[][defaultColsH], int curR, int curC, int EMPTY, bool& moveMade);
 
 // Upper Left
-void upperLeft(int curPosition[][defaultColsH], int curR, int curC, int EMPTY);
+void upperLeft(int curPosition[][defaultColsH], int curR, int curC, int EMPTY, bool& moveMade);
 
 // Lower Right
-void lowerRight(int curPosition[][defaultColsH], int curR, int curC, int EMPTY);
+void lowerRight(int curPosition[][defaultColsH], int curR, int curC, int EMPTY, bool& moveMade);
 
 // Lower Left
-void lowerLeft(int curPosition[][defaultColsH], int curR, int curC, int EMPTY);
+void lowerLeft(int curPosition[][defaultColsH], int curR, int curC, int EMPTY, bool& moveMade);
 
 // --------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------
