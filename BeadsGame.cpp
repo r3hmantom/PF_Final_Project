@@ -66,29 +66,29 @@ void handleSelectionAndMovement(int board[ROWS][COLS], int gridX, int gridY, int
     }
     else {
         // Perform movement based on the position clicked
-        if (gridY == selectedRow && gridX == selectedCol + 1) {
+        if ((gridY == selectedRow && gridX == selectedCol + 1) || (gridY == selectedRow && gridX == selectedCol + 2) ) {
             moveRight(board, selectedRow, selectedCol, EMPTY, moveMade);
         }
-        else if (gridY == selectedRow && gridX == selectedCol - 1) {
+        else if ((gridY == selectedRow && gridX == selectedCol - 1) || (gridY == selectedRow && gridX == selectedCol - 2)) {
             moveLeft(board, selectedRow, selectedCol, EMPTY, moveMade);
         }
-        else if (gridX == selectedCol && gridY == selectedRow + 1) {
+        else if ((gridX == selectedCol && gridY == selectedRow + 1) || (gridX == selectedCol && gridY == selectedRow + 2)) {
             moveBottom(board, selectedRow, selectedCol, EMPTY, moveMade);
         }
-        else if (gridX == selectedCol && gridY == selectedRow - 1) {
+        else if ((gridX == selectedCol && gridY == selectedRow - 1) || (gridX == selectedCol && gridY == selectedRow - 2)) {
             moveTop(board, selectedRow, selectedCol, EMPTY, moveMade);
         }
         // Diagonal movement checks
-        else if (gridX == selectedCol + 1 && gridY == selectedRow - 1) {
+        else if ((gridX == selectedCol + 1 && gridY == selectedRow - 1) || (gridX == selectedCol + 2 && gridY == selectedRow - 2)) {
             upperRight(board, selectedRow, selectedCol, EMPTY, moveMade);
         }
-        else if (gridX == selectedCol - 1 && gridY == selectedRow - 1) {
+        else if ((gridX == selectedCol - 1 && gridY == selectedRow - 1) || (gridX == selectedCol - 2 && gridY == selectedRow - 2)) {
             upperLeft(board, selectedRow, selectedCol, EMPTY, moveMade);
         }
-        else if (gridX == selectedCol + 1 && gridY == selectedRow + 1) {
+        else if ((gridX == selectedCol + 1 && gridY == selectedRow + 1) || (gridX == selectedCol + 2 && gridY == selectedRow + 2)) {
             lowerRight(board, selectedRow, selectedCol, EMPTY, moveMade);
         }
-        else if (gridX == selectedCol - 1 && gridY == selectedRow + 1) {
+        else if ((gridX == selectedCol - 1 && gridY == selectedRow + 1) || (gridX == selectedCol - 2 && gridY == selectedRow + 2)) {
             lowerLeft(board, selectedRow, selectedCol, EMPTY, moveMade);
         }
 
