@@ -24,6 +24,38 @@ void handleSelectionAndMovement(int board[ROWS][COLS], int gridX, int gridY, int
 // -----------------
 void drawBeads(sf::RenderWindow& window, const sf::Sprite& beadSprite1, const sf::Sprite& beadSprite2, int board[ROWS][COLS], int selectedRow, int selectedCol);
 // -----------------
+bool isMoveRight(int gridX, int gridY, int selectedCol, int selectedRow) {
+	return gridY == selectedRow && (gridX == selectedCol + 1 || gridX == selectedCol + 2);
+}
+bool isMoveLeft(int gridX, int gridY, int selectedCol, int selectedRow) {
+	return gridY == selectedRow && (gridX == selectedCol - 1 || gridX == selectedCol - 2);
+}
+bool isMoveDown(int gridX, int gridY, int selectedCol, int selectedRow) {
+	return gridX == selectedCol && (gridY == selectedRow + 1 || gridY == selectedRow + 2);
+}
+bool isMoveUp(int gridX, int gridY, int selectedCol, int selectedRow) {
+	return gridX == selectedCol && (gridY == selectedRow - 1 || gridY == selectedRow - 2);
+}
+bool isMoveUpperRight(int gridX, int gridY, int selectedCol, int selectedRow) {
+	return (gridX == selectedCol + 1 && gridY == selectedRow - 1) ||
+		(gridX == selectedCol + 2 && gridY == selectedRow - 2);
+}
+bool isMoveUpperLeft(int gridX, int gridY, int selectedCol, int selectedRow) {
+	return (gridX == selectedCol - 1 && gridY == selectedRow - 1) ||
+		(gridX == selectedCol - 2 && gridY == selectedRow - 2);
+}
+bool isMoveLowerRight(int gridX, int gridY, int selectedCol, int selectedRow) {
+	return (gridX == selectedCol + 1 && gridY == selectedRow + 1) ||
+		(gridX == selectedCol + 2 && gridY == selectedRow + 2);
+}
+bool isMoveLowerLeft(int gridX, int gridY, int selectedCol, int selectedRow) {
+	return (gridX == selectedCol - 1 && gridY == selectedRow + 1) ||
+		(gridX == selectedCol - 2 && gridY == selectedRow + 2);
+}
+// -----------------
+
+
+
 
 int main() {
 	int board[ROWS][COLS] = {};
@@ -105,31 +137,32 @@ void handleSelectionAndMovement(int board[ROWS][COLS], int gridX, int gridY, int
 	}
 	else {
 		// Perform movement based on the position clicked
-		if ((gridY == selectedRow && gridX == selectedCol + 1) || (gridY == selectedRow && gridX == selectedCol + 2)) {
+		if (isMoveRight(gridX, gridY, selectedCol, selectedRow)) {
 			moveRight(board, selectedRow, selectedCol, EMPTY, moveMade);
 		}
-		else if ((gridY == selectedRow && gridX == selectedCol - 1) || (gridY == selectedRow && gridX == selectedCol - 2)) {
+		else if (isMoveLeft(gridX, gridY, selectedCol, selectedRow)) {
 			moveLeft(board, selectedRow, selectedCol, EMPTY, moveMade);
 		}
-		else if ((gridX == selectedCol && gridY == selectedRow + 1) || (gridX == selectedCol && gridY == selectedRow + 2)) {
+		else if (isMoveDown(gridX, gridY, selectedCol, selectedRow)) {
 			moveBottom(board, selectedRow, selectedCol, EMPTY, moveMade);
 		}
-		else if ((gridX == selectedCol && gridY == selectedRow - 1) || (gridX == selectedCol && gridY == selectedRow - 2)) {
+		else if (isMoveUp(gridX, gridY, selectedCol, selectedRow)) {
 			moveTop(board, selectedRow, selectedCol, EMPTY, moveMade);
 		}
 		// Diagonal movement checks
-		else if ((gridX == selectedCol + 1 && gridY == selectedRow - 1) || (gridX == selectedCol + 2 && gridY == selectedRow - 2)) {
+		else if (isMoveUpperRight(gridX, gridY, selectedCol, selectedRow)) {
 			upperRight(board, selectedRow, selectedCol, EMPTY, moveMade);
 		}
-		else if ((gridX == selectedCol - 1 && gridY == selectedRow - 1) || (gridX == selectedCol - 2 && gridY == selectedRow - 2)) {
+		else if (isMoveUpperLeft(gridX, gridY, selectedCol, selectedRow)) {
 			upperLeft(board, selectedRow, selectedCol, EMPTY, moveMade);
 		}
-		else if ((gridX == selectedCol + 1 && gridY == selectedRow + 1) || (gridX == selectedCol + 2 && gridY == selectedRow + 2)) {
+		else if (isMoveLowerRight(gridX, gridY, selectedCol, selectedRow)) {
 			lowerRight(board, selectedRow, selectedCol, EMPTY, moveMade);
 		}
-		else if ((gridX == selectedCol - 1 && gridY == selectedRow + 1) || (gridX == selectedCol - 2 && gridY == selectedRow + 2)) {
+		else if (isMoveLowerLeft(gridX, gridY, selectedCol, selectedRow)) {
 			lowerLeft(board, selectedRow, selectedCol, EMPTY, moveMade);
 		}
+
 
 		// Reset selection
 		selectedRow = -1;
