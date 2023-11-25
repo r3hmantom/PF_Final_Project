@@ -18,6 +18,7 @@ bool isPlayer1Turn = true;
 // Function Declarations
 bool loadTexture(sf::Texture& texture, const string& filename);
 void centerSpriteOrigins(sf::Sprite& sprite1, sf::Sprite& sprite2);
+bool loadAndSetupSprites(sf::Sprite& beadSprite1, sf::Sprite& beadSprite2, sf::Texture& beadTexture1, sf::Texture& beadTexture2);
 // -----------------
 void processInput(sf::RenderWindow& window, int board[ROWS][COLS], int& selectedRow, int& selectedCol);
 void handleSelectionAndMovement(int board[ROWS][COLS], int gridX, int gridY, int& selectedRow, int& selectedCol);
@@ -53,25 +54,44 @@ bool isMoveLowerLeft(int gridX, int gridY, int selectedCol, int selectedRow) {
 		(gridX == selectedCol - 2 && gridY == selectedRow + 2);
 }
 // -----------------
-
+void runGameLoop(sf::RenderWindow& window, int board[ROWS][COLS], sf::Sprite& beadSprite1, sf::Sprite& beadSprite2);
+bool initializeWindow(sf::RenderWindow& window);
 
 
 
 int main() {
+	// Initializing Game Board
 	int board[ROWS][COLS] = {};
 	initBoard(board, ROWS, COLS, PLAYER1, PLAYER2, EMPTY);
 
-	sf::RenderWindow window(sf::VideoMode(800, 800), "12 Beads Game");
-
-	sf::Texture beadTexture1, beadTexture2;
-	if (!loadTexture(beadTexture1, "bead1.png") || !loadTexture(beadTexture2, "bead2.png")) {
-		cerr << "Failed to load bead textures." << endl;
+	// Creating Window
+	sf::RenderWindow window;
+	if (!initializeWindow(window)) {
 		return EXIT_FAILURE;
 	}
 
-	sf::Sprite beadSprite1(beadTexture1), beadSprite2(beadTexture2);
-	centerSpriteOrigins(beadSprite1, beadSprite2);
+	// Setting up Game Assets
+	sf::Sprite beadSprite1, beadSprite2;
+	sf::Texture beadTexture1, beadTexture2;
+	if (!loadAndSetupSprites(beadSprite1, beadSprite2, beadTexture1, beadTexture2)) {
+		cerr << "Failed to load and setup sprites." << endl;
+		return EXIT_FAILURE;
+	}
 
+	// Main Game
+	runGameLoop(window, board, beadSprite1, beadSprite2);
+
+	return EXIT_SUCCESS;
+}
+
+
+
+// Main Functions
+bool initializeWindow(sf::RenderWindow& window) {
+	window.create(sf::VideoMode(800, 800), "12 Beads Game");
+	return window.isOpen();
+}
+void runGameLoop(sf::RenderWindow& window, int board[ROWS][COLS], sf::Sprite& beadSprite1, sf::Sprite& beadSprite2) {
 	int selectedRow = -1, selectedCol = -1;
 
 	while (window.isOpen()) {
@@ -80,8 +100,6 @@ int main() {
 		drawBeads(window, beadSprite1, beadSprite2, board, selectedRow, selectedCol);
 		window.display();
 	}
-
-	return EXIT_SUCCESS;
 }
 
 
@@ -97,6 +115,17 @@ bool loadTexture(sf::Texture& texture, const string& filename) {
 void centerSpriteOrigins(sf::Sprite& sprite1, sf::Sprite& sprite2) {
 	sprite1.setOrigin(sprite1.getTexture()->getSize().x / 2, sprite1.getTexture()->getSize().y / 2);
 	sprite2.setOrigin(sprite2.getTexture()->getSize().x / 2, sprite2.getTexture()->getSize().y / 2);
+}
+bool loadAndSetupSprites(sf::Sprite& beadSprite1, sf::Sprite& beadSprite2, sf::Texture& beadTexture1, sf::Texture& beadTexture2) {
+	
+	if (!loadTexture(beadTexture1, "bead1.png") || !loadTexture(beadTexture2, "bead2.png")) {
+		return false;
+	}
+
+	beadSprite1.setTexture(beadTexture1);
+	beadSprite2.setTexture(beadTexture2);
+	centerSpriteOrigins(beadSprite1, beadSprite2);
+	return true;
 }
 
 
