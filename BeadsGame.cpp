@@ -180,16 +180,20 @@ void handleSelectionAndMovement(int board[ROWS][COLS], int gridX, int gridY, int
 		}
 		// Diagonal movement checks
 		else if (isMoveUpperRight(gridX, gridY, selectedCol, selectedRow)) {
-			upperRight(board, selectedRow, selectedCol, EMPTY, moveMade);
+			if ((selectedRow + selectedCol) % 2 == 0)
+				upperRight(board, selectedRow, selectedCol, EMPTY, moveMade);
 		}
 		else if (isMoveUpperLeft(gridX, gridY, selectedCol, selectedRow)) {
-			upperLeft(board, selectedRow, selectedCol, EMPTY, moveMade);
+			if ((selectedRow + selectedCol) % 2 == 0)
+				upperLeft(board, selectedRow, selectedCol, EMPTY, moveMade);
 		}
 		else if (isMoveLowerRight(gridX, gridY, selectedCol, selectedRow)) {
-			lowerRight(board, selectedRow, selectedCol, EMPTY, moveMade);
+			if ((selectedRow + selectedCol) % 2 == 0)
+			    lowerRight(board, selectedRow, selectedCol, EMPTY, moveMade);
 		}
 		else if (isMoveLowerLeft(gridX, gridY, selectedCol, selectedRow)) {
-			lowerLeft(board, selectedRow, selectedCol, EMPTY, moveMade);
+			if ((selectedRow + selectedCol) % 2 == 0)
+				lowerLeft(board, selectedRow, selectedCol, EMPTY, moveMade);
 		}
 
 
