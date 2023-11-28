@@ -179,9 +179,20 @@ int main() {
 
 // Main Functions
 bool initializeWindow(sf::RenderWindow& window) {
-	window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "12 Beads Game");
+	// Get the desktop mode to determine the screen resolution
+	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+
+	// Create window with the desktop resolution
+	// sf::Style::Default allows the window to be resized and keeps the taskbar visible
+	window.create(sf::VideoMode(desktop.width, desktop.height), "12 Beads Game", sf::Style::Default);
+
+	// Maximize the window
+	window.setPosition(sf::Vector2i(0, 0));
+	window.setSize(sf::Vector2u(desktop.width, desktop.height));
+
 	return window.isOpen();
 }
+
 void runGameLoop(sf::RenderWindow& window, int board[ROWS][COLS], sf::Sprite& beadSprite1, sf::Sprite& beadSprite2, sf::Sprite& boardSprite) {
 	int selectedRow = -1, selectedCol = -1;
 	bool gameEnded = false;
