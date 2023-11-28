@@ -35,13 +35,13 @@ void initBoard(int board[][defaultColsF], int ROWS, int COLS, int PLAYER1, int P
 	// Initializing two columns on third row right
 	for (int i = 3; i < COLS; i++) {
 		for (int j = 2; j < 3; j++)
-			board[j][i] = PLAYER2;
+			board[j][i] = PLAYER1;
 	}
 
 	// Initializing last two rows
 	for (int i = 0; i < COLS; i++)
 		for (int j = 3; j < ROWS; j++)
-			board[j][i] = PLAYER2;
+			board[j][i] = PLAYER1;
 }
 // Displaying Board on console
 void displayBoard(int board[][defaultColsF], int ROWS, int COLS) {

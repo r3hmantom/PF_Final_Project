@@ -56,6 +56,57 @@ bool isMoveLowerLeft(int gridX, int gridY, int selectedCol, int selectedRow) {
 // -----------------
 void runGameLoop(sf::RenderWindow& window, int board[ROWS][COLS], sf::Sprite& beadSprite1, sf::Sprite& beadSprite2);
 bool initializeWindow(sf::RenderWindow& window);
+// -----------------
+void displayWinningMessage(sf::RenderWindow& window, bool player1Won) {
+	sf::Font font;
+	if (!font.loadFromFile("font.ttf")) {
+		cerr << "Error loading font" << endl;
+		return;
+	}
+
+	sf::Text text;
+	text.setFont(font);
+	text.setString(player1Won ? "Player 1 Wins!" : "Player 2 Wins!");
+	text.setCharacterSize(50); // Increased size
+	text.setFillColor(sf::Color::White);
+	text.setStyle(sf::Text::Bold); // Making the text bold
+
+	// Get the bounding box of the text
+	sf::FloatRect textRect = text.getLocalBounds();
+	// Center the text origin
+	text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+	// Set the position of the text to be in the center of the window
+	text.setPosition(sf::Vector2f(window.getSize().x / 2.0f, window.getSize().y / 2.0f));
+
+	window.draw(text);
+}
+bool checkForWin(const int board[ROWS][COLS], bool& player1Won) {
+	bool player1Exists = false;
+	bool player2Exists = false;
+
+	for (int row = 0; row < ROWS; ++row) {
+		for (int col = 0; col < COLS; ++col) {
+			if (board[row][col] == PLAYER1) {
+				player1Exists = true;
+			}
+			else if (board[row][col] == PLAYER2) {
+				player2Exists = true;
+			}
+		}
+	}
+
+	if (!player1Exists) {
+		player1Won = false; // PLAYER2 wins
+		return true;
+	}
+	if (!player2Exists) {
+		player1Won = true; // PLAYER1 wins
+		return true;
+	}
+
+	return false; // No winner yet
+}
+
 
 
 
@@ -93,11 +144,23 @@ bool initializeWindow(sf::RenderWindow& window) {
 }
 void runGameLoop(sf::RenderWindow& window, int board[ROWS][COLS], sf::Sprite& beadSprite1, sf::Sprite& beadSprite2) {
 	int selectedRow = -1, selectedCol = -1;
+	bool gameEnded = false; // To track if the game has ended
+	bool player1Won = false; // To track who won
 
 	while (window.isOpen()) {
 		processInput(window, board, selectedRow, selectedCol);
 		window.clear();
+
+		if (!gameEnded && checkForWin(board, player1Won)) {
+			gameEnded = true;
+		}
+
 		drawBeads(window, beadSprite1, beadSprite2, board, selectedRow, selectedCol);
+
+		if (gameEnded) {
+			displayWinningMessage(window, player1Won);
+		}
+
 		window.display();
 	}
 }
