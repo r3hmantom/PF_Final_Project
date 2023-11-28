@@ -11,6 +11,11 @@ const int EMPTY = 0;
 const int PLAYER1 = 1;
 const int PLAYER2 = -1;
 const int BEAD_SIZE = 160;
+const int WINDOW_WIDTH = 1600;
+const int WINDOW_HEIGHT = 1000;
+const int TOP_OFFSET = 100;
+const int LEFT_OFFSET = 100;
+
 
 // Global Variables
 bool isPlayer1Turn = true;
@@ -139,7 +144,7 @@ int main() {
 
 // Main Functions
 bool initializeWindow(sf::RenderWindow& window) {
-	window.create(sf::VideoMode(800, 800), "12 Beads Game");
+	window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "12 Beads Game");
 	return window.isOpen();
 }
 void runGameLoop(sf::RenderWindow& window, int board[ROWS][COLS], sf::Sprite& beadSprite1, sf::Sprite& beadSprite2) {
@@ -204,8 +209,8 @@ void processInput(sf::RenderWindow& window, int board[ROWS][COLS], int& selected
 		}
 
 		if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-			int gridX = event.mouseButton.x / BEAD_SIZE;
-			int gridY = event.mouseButton.y / BEAD_SIZE;
+			int gridX = ((event.mouseButton.x - LEFT_OFFSET) / BEAD_SIZE);
+			int gridY = ((event.mouseButton.y - TOP_OFFSET)  / BEAD_SIZE);
 
 			if (isValidGridPosition(gridX, gridY)) {
 				handleSelectionAndMovement(board, gridX, gridY, selectedRow, selectedCol);
@@ -280,7 +285,7 @@ void handleSelectionAndMovement(int board[ROWS][COLS], int gridX, int gridY, int
 // Drawing Beads
 void drawBead(sf::RenderWindow& window, const sf::Sprite& sprite, int row, int col, int selectedRow, int selectedCol, float& rotationAngle) {
 	sf::Sprite tempSprite = sprite; // Copy to modify position and rotation
-	tempSprite.setPosition(col * BEAD_SIZE + BEAD_SIZE / 2, row * BEAD_SIZE + BEAD_SIZE / 2);
+	tempSprite.setPosition(col * BEAD_SIZE + BEAD_SIZE / 2 + LEFT_OFFSET ,  row * BEAD_SIZE + BEAD_SIZE / 2 + TOP_OFFSET);
 	tempSprite.setRotation((row == selectedRow && col == selectedCol) ? (rotationAngle += 0.6f) : 0.0f);
 	window.draw(tempSprite);
 }
