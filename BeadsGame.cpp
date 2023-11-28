@@ -13,8 +13,11 @@ const int PLAYER2 = -1;
 const int BEAD_SIZE = 160;
 const int WINDOW_WIDTH = 1600;
 const int WINDOW_HEIGHT = 1000;
-const int TOP_OFFSET = 100;
-const int LEFT_OFFSET = 100;
+const int BOARD_TOP_OFFSET = 100;
+const int BOARD_LEFT_OFFSET = 100;
+const int TURN_TOP_OFFSET = 10;
+const int TURN_LEFT_OFFSET = 400;
+
 
 
 // Global Variables
@@ -111,6 +114,25 @@ bool checkForWin(const int board[ROWS][COLS], bool& player1Won) {
 
 	return false; // No winner yet
 }
+void displayPlayerTurn(sf::RenderWindow& window, bool isPlayer1Turn) {
+	sf::Font font;
+	if (!font.loadFromFile("font.ttf")) {
+		cerr << "Error loading font" << endl;
+		return;
+	}
+
+	sf::Text text;
+	text.setFont(font);
+	text.setString(isPlayer1Turn ? "Player 1's Turn" : "Player 2's Turn");
+	text.setCharacterSize(30); 
+	text.setFillColor(sf::Color::White);
+
+	// Set the position of the text
+	text.setPosition(TURN_LEFT_OFFSET, TURN_TOP_OFFSET); 
+
+	window.draw(text);
+}
+
 
 
 
@@ -149,8 +171,8 @@ bool initializeWindow(sf::RenderWindow& window) {
 }
 void runGameLoop(sf::RenderWindow& window, int board[ROWS][COLS], sf::Sprite& beadSprite1, sf::Sprite& beadSprite2) {
 	int selectedRow = -1, selectedCol = -1;
-	bool gameEnded = false; // To track if the game has ended
-	bool player1Won = false; // To track who won
+	bool gameEnded = false;
+	bool player1Won = false;
 
 	while (window.isOpen()) {
 		processInput(window, board, selectedRow, selectedCol);
@@ -162,8 +184,11 @@ void runGameLoop(sf::RenderWindow& window, int board[ROWS][COLS], sf::Sprite& be
 
 		drawBeads(window, beadSprite1, beadSprite2, board, selectedRow, selectedCol);
 
-		if (gameEnded) {
-			displayWinningMessage(window, player1Won);
+		if (!gameEnded) {
+			displayPlayerTurn(window, isPlayer1Turn); // Display whose turn it is
+		}
+		else {
+			displayWinningMessage(window, player1Won); // Display winning message if game ended
 		}
 
 		window.display();
@@ -209,8 +234,8 @@ void processInput(sf::RenderWindow& window, int board[ROWS][COLS], int& selected
 		}
 
 		if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-			int gridX = ((event.mouseButton.x - LEFT_OFFSET) / BEAD_SIZE);
-			int gridY = ((event.mouseButton.y - TOP_OFFSET)  / BEAD_SIZE);
+			int gridX = ((event.mouseButton.x - BOARD_LEFT_OFFSET) / BEAD_SIZE);
+			int gridY = ((event.mouseButton.y - BOARD_TOP_OFFSET)  / BEAD_SIZE);
 
 			if (isValidGridPosition(gridX, gridY)) {
 				handleSelectionAndMovement(board, gridX, gridY, selectedRow, selectedCol);
@@ -285,7 +310,7 @@ void handleSelectionAndMovement(int board[ROWS][COLS], int gridX, int gridY, int
 // Drawing Beads
 void drawBead(sf::RenderWindow& window, const sf::Sprite& sprite, int row, int col, int selectedRow, int selectedCol, float& rotationAngle) {
 	sf::Sprite tempSprite = sprite; // Copy to modify position and rotation
-	tempSprite.setPosition(col * BEAD_SIZE + BEAD_SIZE / 2 + LEFT_OFFSET ,  row * BEAD_SIZE + BEAD_SIZE / 2 + TOP_OFFSET);
+	tempSprite.setPosition(col * BEAD_SIZE + BEAD_SIZE / 2 + BOARD_LEFT_OFFSET ,  row * BEAD_SIZE + BEAD_SIZE / 2 + BOARD_TOP_OFFSET);
 	tempSprite.setRotation((row == selectedRow && col == selectedCol) ? (rotationAngle += 0.6f) : 0.0f);
 	window.draw(tempSprite);
 }
