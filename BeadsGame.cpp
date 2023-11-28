@@ -137,6 +137,65 @@ void displayPlayerTurn(sf::RenderWindow& window, bool isPlayer1Turn) {
 	window.draw(text);
 }
 
+// -----------------
+// MENU FUNCTIONS
+// Function Declarations
+void showMenu(sf::RenderWindow& window, bool& startGame, bool& exitGame);
+void handleMenuInput(sf::RenderWindow& window, const sf::Event& event, bool& startGame, bool& exitGame);
+
+void showMenu(sf::RenderWindow& window, bool& startGame, bool& exitGame) {
+	sf::Font font;
+	if (!font.loadFromFile("font.ttf")) {
+		cerr << "Error loading font" << endl;
+		return;
+	}
+
+	// Start Game Text
+	sf::Text startGameText("Start Game", font, 50);
+	startGameText.setPosition(100, 200); // Adjust as needed
+	startGameText.setFillColor(sf::Color::White);
+
+	// Exit Game Text
+	sf::Text exitGameText("Exit Game", font, 50);
+	exitGameText.setPosition(100, 300); // Adjust as needed
+	exitGameText.setFillColor(sf::Color::White);
+
+	window.draw(startGameText);
+	window.draw(exitGameText);
+}
+
+void handleMenuInput(sf::RenderWindow& window, const sf::Event& event, bool& startGame, bool& exitGame) {
+	if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+		sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+		// Assuming text bounds are 200x50
+		sf::FloatRect startGameBounds(100, 200, 200, 50);
+		sf::FloatRect exitGameBounds(100, 300, 200, 50);
+
+		if (startGameBounds.contains(mousePos)) {
+			startGame = true;
+		}
+		else if (exitGameBounds.contains(mousePos)) {
+			exitGame = true;
+		}
+	}
+}
+void showAndHandleMenu(sf::RenderWindow& window, bool& startGame, bool& exitGame) {
+	sf::Event event;
+	while (window.pollEvent(event)) {
+		if (event.type == sf::Event::Closed) {
+			window.close();
+		}
+
+		handleMenuInput(window, event, startGame, exitGame);
+	}
+
+	window.clear();
+	showMenu(window, startGame, exitGame);
+	window.display();
+}
+
+
 
 
 
@@ -145,6 +204,10 @@ int main() {
 	// Initializing Game Board
 	int board[ROWS][COLS] = {};
 	initBoard(board, ROWS, COLS, PLAYER1, PLAYER2, EMPTY);
+
+	// Game State Variables
+	bool startGame = false;
+	bool exitGame = false;
 
 	// Creating Window
 	sf::RenderWindow window;
@@ -169,8 +232,17 @@ int main() {
 		return EXIT_FAILURE;
 	}
 
-	// Main Game
-	runGameLoop(window, board, beadSprite1, beadSprite2, boardSprite);
+	// Show and Handle Menu
+	while (window.isOpen() && !startGame && !exitGame) {
+		showAndHandleMenu(window, startGame, exitGame);
+	}
+
+	// Run Game Loop if Start Game is Selected
+	if (startGame) {
+		while (window.isOpen()) {
+			runGameLoop(window, board, beadSprite1, beadSprite2, boardSprite);
+		}
+	}
 
 	return EXIT_SUCCESS;
 }
@@ -192,7 +264,6 @@ bool initializeWindow(sf::RenderWindow& window) {
 
 	return window.isOpen();
 }
-
 void runGameLoop(sf::RenderWindow& window, int board[ROWS][COLS], sf::Sprite& beadSprite1, sf::Sprite& beadSprite2, sf::Sprite& boardSprite) {
 	int selectedRow = -1, selectedCol = -1;
 	bool gameEnded = false;
