@@ -449,16 +449,25 @@ void processInput(sf::RenderWindow& window, int board[ROWS][COLS], int& selected
 }
 
 void handleSelectionAndMovement(int board[ROWS][COLS], int gridX, int gridY, int& selectedRow, int& selectedCol, bool& isPlayer1Turn) {
-	static int originalRow = -1, originalCol = -1;
 	static bool moveMade = false; // Track if a valid move has been made
 
-	if (selectedRow == -1) {
+	// If a bead is already selected and the new click is on another bead
+	if ((selectedRow != -1 && selectedCol != -1) && (gridX != selectedCol || gridY != selectedRow)) {
+		if ((isPlayer1Turn && board[gridY][gridX] == PLAYER1) || (!isPlayer1Turn && board[gridY][gridX] == PLAYER2)) {
+			// Select the new bead
+			selectedRow = gridY;
+			selectedCol = gridX;
+			moveMade = false; // Reset moveMade for the new selection
+			return; // Exit the function here to avoid further processing in this turn
+		}
+	}
+
+	// If no bead is currently selected or the same bead is clicked again
+	if (selectedRow == -1 || (selectedRow == gridY && selectedCol == gridX)) {
 		// Selecting a bead if it belongs to the current player
 		if ((isPlayer1Turn && board[gridY][gridX] == PLAYER1) || (!isPlayer1Turn && board[gridY][gridX] == PLAYER2)) {
 			selectedRow = gridY;
 			selectedCol = gridX;
-			originalRow = gridY;
-			originalCol = gridX;
 			moveMade = false; // Reset moveMade for a new selection
 		}
 	}
@@ -499,9 +508,6 @@ void handleSelectionAndMovement(int board[ROWS][COLS], int gridX, int gridY, int
 			moveMade = false;
 		}
 
-		// Reset original position
-		originalRow = -1;
-		originalCol = -1;
 	}
 }
 
