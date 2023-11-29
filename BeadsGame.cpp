@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <SFML/Graphics.hpp>
 #include "Beads.h"
 
@@ -20,6 +21,11 @@ const int TURN_TOP_OFFSET = 10;
 const int TURN_LEFT_OFFSET = 400;
 
 
+struct GameState {
+	int board[ROWS][COLS];
+	bool isPlayer1Turn;
+};
+
 
 // Global Variables
 bool isPlayer1Turn = true;
@@ -31,8 +37,9 @@ void centerSpriteOrigins(sf::Sprite& sprite1, sf::Sprite& sprite2);
 bool loadAndSetupSprites(sf::Sprite& beadSprite1, sf::Sprite& beadSprite2, sf::Texture& beadTexture1, sf::Texture& beadTexture2);
 bool loadAndSetupBoard(sf::Sprite& boardSprite, sf::Texture& boardTexture);
 // -----------------
-void processInput(sf::RenderWindow& window, int board[ROWS][COLS], int& selectedRow, int& selectedCol);
-void handleSelectionAndMovement(int board[ROWS][COLS], int gridX, int gridY, int& selectedRow, int& selectedCol);
+void processInput(sf::RenderWindow& window, int board[ROWS][COLS], int& selectedRow, int& selectedCol, bool& isPlayer1Turn, GameState& gameState);
+void handleSelectionAndMovement(int board[ROWS][COLS], int gridX, int gridY, int& selectedRow, int& selectedCol, bool& isPlayer1Turn);
+
 // -----------------
 void drawBeads(sf::RenderWindow& window, const sf::Sprite& beadSprite1, const sf::Sprite& beadSprite2, int board[ROWS][COLS], int selectedRow, int selectedCol);
 
@@ -66,8 +73,9 @@ bool isMoveLowerLeft(int gridX, int gridY, int selectedCol, int selectedRow) {
 		(gridX == selectedCol - 2 && gridY == selectedRow + 2);
 }
 // -----------------
-void runGameLoop(sf::RenderWindow& window, int board[ROWS][COLS], sf::Sprite& beadSprite1, sf::Sprite& beadSprite2, sf::Sprite& boardSprite);
+void runGameLoop(sf::RenderWindow& window, GameState& gameState, sf::Sprite& beadSprite1, sf::Sprite& beadSprite2, sf::Sprite& boardSprite);
 bool initializeWindow(sf::RenderWindow& window);
+
 // -----------------
 void displayWinningMessage(sf::RenderWindow& window, bool player1Won) {
 	sf::Font font;
@@ -140,10 +148,8 @@ void displayPlayerTurn(sf::RenderWindow& window, bool isPlayer1Turn) {
 // -----------------
 // MENU FUNCTIONS
 // Function Declarations
-void showMenu(sf::RenderWindow& window, bool& startGame, bool& exitGame);
-void handleMenuInput(sf::RenderWindow& window, const sf::Event& event, bool& startGame, bool& exitGame);
 
-void showMenu(sf::RenderWindow& window, bool& startGame, bool& exitGame) {
+void showMenu(sf::RenderWindow& window, bool& startGame, bool& exitGame, bool& resumeGameSelected) {
 	sf::Font font;
 	if (!font.loadFromFile("font.ttf")) {
 		cerr << "Error loading font" << endl;
@@ -152,46 +158,55 @@ void showMenu(sf::RenderWindow& window, bool& startGame, bool& exitGame) {
 
 	// Start Game Text
 	sf::Text startGameText("Start Game", font, 50);
-	startGameText.setPosition(100, 200); // Adjust as needed
+	startGameText.setPosition(100, 200);
 	startGameText.setFillColor(sf::Color::White);
+
+	// Resume Game Text
+	sf::Text resumeGameText("Resume Game", font, 50);
+	resumeGameText.setPosition(100, 300);
+	resumeGameText.setFillColor(sf::Color::White);
 
 	// Exit Game Text
 	sf::Text exitGameText("Exit Game", font, 50);
-	exitGameText.setPosition(100, 300); // Adjust as needed
+	exitGameText.setPosition(100, 400);
 	exitGameText.setFillColor(sf::Color::White);
 
 	window.draw(startGameText);
+	window.draw(resumeGameText);
 	window.draw(exitGameText);
 }
-
-void handleMenuInput(sf::RenderWindow& window, const sf::Event& event, bool& startGame, bool& exitGame) {
+void handleMenuInput(sf::RenderWindow& window, const sf::Event& event, bool& startGame, bool& exitGame, bool& resumeGameSelected) {
 	if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
 		sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
-		// Assuming text bounds are 200x50
+		// Assuming text bounds are 200x50 for each option
 		sf::FloatRect startGameBounds(100, 200, 200, 50);
-		sf::FloatRect exitGameBounds(100, 300, 200, 50);
+		sf::FloatRect resumeGameBounds(100, 300, 200, 50);
+		sf::FloatRect exitGameBounds(100, 400, 200, 50);
 
 		if (startGameBounds.contains(mousePos)) {
 			startGame = true;
+		}
+		else if (resumeGameBounds.contains(mousePos)) {
+			resumeGameSelected = true;
 		}
 		else if (exitGameBounds.contains(mousePos)) {
 			exitGame = true;
 		}
 	}
 }
-void showAndHandleMenu(sf::RenderWindow& window, bool& startGame, bool& exitGame) {
+void showAndHandleMenu(sf::RenderWindow& window, bool& startGame, bool& exitGame, bool& resumeGameSelected) {
 	sf::Event event;
 	while (window.pollEvent(event)) {
 		if (event.type == sf::Event::Closed) {
 			window.close();
 		}
 
-		handleMenuInput(window, event, startGame, exitGame);
+		handleMenuInput(window, event, startGame, exitGame, resumeGameSelected);
 	}
 
 	window.clear();
-	showMenu(window, startGame, exitGame);
+	showMenu(window, startGame, exitGame, resumeGameSelected);
 	window.display();
 }
 
@@ -200,23 +215,37 @@ void showAndHandleMenu(sf::RenderWindow& window, bool& startGame, bool& exitGame
 
 
 
+
+
+
+void saveGameState(const GameState& state, const string& filename) {
+	ofstream file(filename, ios::binary);
+	if (file.is_open()) {
+		file.write(reinterpret_cast<const char*>(&state), sizeof(GameState));
+	}
+	file.close();
+}
+
+bool loadGameState(GameState& state, const string& filename) {
+	ifstream file(filename, ios::binary);
+	if (file.is_open() && file.read(reinterpret_cast<char*>(&state), sizeof(GameState))) {
+		file.close();
+		return true;
+	}
+	return false;
+}
+
+
+
+
 int main() {
-	// Initializing Game Board
-	int board[ROWS][COLS] = {};
-	initBoard(board, ROWS, COLS, PLAYER1, PLAYER2, EMPTY);
-
-	// Game State Variables
-	bool startGame = false;
-	bool exitGame = false;
-
-	// Creating Window
+	// Initializing Window
 	sf::RenderWindow window;
 	if (!initializeWindow(window)) {
 		return EXIT_FAILURE;
 	}
 
 	// Setting up Game Assets
-	//--Beads
 	sf::Sprite beadSprite1, beadSprite2;
 	sf::Texture beadTexture1, beadTexture2;
 	if (!loadAndSetupSprites(beadSprite1, beadSprite2, beadTexture1, beadTexture2)) {
@@ -224,7 +253,6 @@ int main() {
 		return EXIT_FAILURE;
 	}
 
-	//--Board
 	sf::Sprite boardSprite;
 	sf::Texture boardTexture;
 	if (!loadAndSetupBoard(boardSprite, boardTexture)) {
@@ -232,15 +260,43 @@ int main() {
 		return EXIT_FAILURE;
 	}
 
+	// Menu Variables
+	bool startGame = false;
+	bool exitGame = false;
+	bool resumeGameSelected = false;
+
+	// Game State Variable
+	GameState gameState;
+
 	// Show and Handle Menu
-	while (window.isOpen() && !startGame && !exitGame) {
-		showAndHandleMenu(window, startGame, exitGame);
+	while (window.isOpen() && !startGame && !exitGame && !resumeGameSelected) {
+		showAndHandleMenu(window, startGame, exitGame, resumeGameSelected);
 	}
 
-	// Run Game Loop if Start Game is Selected
+	// Initialize a New Game if Required
 	if (startGame) {
+		initBoard(gameState.board, ROWS, COLS, PLAYER1, PLAYER2, EMPTY);
+		gameState.isPlayer1Turn = true;
+	}
+
+	// Resume Game Logic
+	else if (resumeGameSelected) {
+		if (!loadGameState(gameState, "savegame.dat")) {
+			// No saved game found or error reading file, start a new game
+			initBoard(gameState.board, ROWS, COLS, PLAYER1, PLAYER2, EMPTY);
+			gameState.isPlayer1Turn = true;
+		}
+	}
+
+	// Exit Game Logic
+	if (exitGame) {
+		return EXIT_SUCCESS;
+	}
+
+	// Run Game Loop if Start Game or Resume Game is Selected
+	if (startGame || resumeGameSelected) {
 		while (window.isOpen()) {
-			runGameLoop(window, board, beadSprite1, beadSprite2, boardSprite);
+			runGameLoop(window, gameState, beadSprite1, beadSprite2, boardSprite);
 		}
 	}
 
@@ -264,30 +320,38 @@ bool initializeWindow(sf::RenderWindow& window) {
 
 	return window.isOpen();
 }
-void runGameLoop(sf::RenderWindow& window, int board[ROWS][COLS], sf::Sprite& beadSprite1, sf::Sprite& beadSprite2, sf::Sprite& boardSprite) {
+void runGameLoop(sf::RenderWindow& window, GameState& gameState, sf::Sprite& beadSprite1, sf::Sprite& beadSprite2, sf::Sprite& boardSprite) {
 	int selectedRow = -1, selectedCol = -1;
 	bool gameEnded = false;
 	bool player1Won = false;
 
 	while (window.isOpen()) {
-		processInput(window, board, selectedRow, selectedCol);
+		// Handle input and update game state
+		processInput(window, gameState.board, selectedRow, selectedCol, gameState.isPlayer1Turn, gameState);
+
+		// Clear the window
 		window.clear();
-		
+
+		// Draw the board
 		window.draw(boardSprite);
 
-		if (!gameEnded && checkForWin(board, player1Won)) {
+		// Check for win condition
+		if (!gameEnded && checkForWin(gameState.board, player1Won)) {
 			gameEnded = true;
 		}
 
-		drawBeads(window, beadSprite1, beadSprite2, board, selectedRow, selectedCol);
+		// Draw beads
+		drawBeads(window, beadSprite1, beadSprite2, gameState.board, selectedRow, selectedCol);
 
+		// Display player turn or winning message
 		if (!gameEnded) {
-			displayPlayerTurn(window, isPlayer1Turn); // Display whose turn it is
+			displayPlayerTurn(window, gameState.isPlayer1Turn);
 		}
 		else {
-			displayWinningMessage(window, player1Won); // Display winning message if game ended
+			displayWinningMessage(window, player1Won);
 		}
 
+		// Display the window contents
 		window.display();
 	}
 }
@@ -331,39 +395,41 @@ bool loadAndSetupBoard(sf::Sprite& boardSprite,sf::Texture& boardTexture) {
 bool isValidGridPosition(int x, int y) {
 	return x >= 0 && x < COLS && y >= 0 && y < ROWS;
 }
-void processInput(sf::RenderWindow& window, int board[ROWS][COLS], int& selectedRow, int& selectedCol) {
+void processInput(sf::RenderWindow& window, int board[ROWS][COLS], int& selectedRow, int& selectedCol, bool& isPlayer1Turn , GameState& gameState) {
 	sf::Event event;
 	while (window.pollEvent(event)) {
 		if (event.type == sf::Event::Closed) {
+			saveGameState(gameState, "savegame.dat");  // Save game before closing
 			window.close();
 		}
 
 		if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
 			int gridX = ((event.mouseButton.x - BOARD_LEFT_OFFSET) / BEAD_SIZE);
-			int gridY = ((event.mouseButton.y - BOARD_TOP_OFFSET)  / BEAD_SIZE);
+			int gridY = ((event.mouseButton.y - BOARD_TOP_OFFSET) / BEAD_SIZE);
 
 			if (isValidGridPosition(gridX, gridY)) {
-				handleSelectionAndMovement(board, gridX, gridY, selectedRow, selectedCol);
+				handleSelectionAndMovement(board, gridX, gridY, selectedRow, selectedCol, isPlayer1Turn);
 			}
 		}
 	}
 }
-void handleSelectionAndMovement(int board[ROWS][COLS], int gridX, int gridY, int& selectedRow, int& selectedCol) {
+
+void handleSelectionAndMovement(int board[ROWS][COLS], int gridX, int gridY, int& selectedRow, int& selectedCol, bool& isPlayer1Turn) {
 	static int originalRow = -1, originalCol = -1;
 	static bool moveMade = false; // Track if a valid move has been made
 
 	if (selectedRow == -1) {
-		// Check if the clicked bead belongs to the current player
+		// Selecting a bead if it belongs to the current player
 		if ((isPlayer1Turn && board[gridY][gridX] == PLAYER1) || (!isPlayer1Turn && board[gridY][gridX] == PLAYER2)) {
 			selectedRow = gridY;
 			selectedCol = gridX;
 			originalRow = gridY;
 			originalCol = gridX;
-			moveMade = false; // Reset moveMade as this is a new selection
+			moveMade = false; // Reset moveMade for a new selection
 		}
 	}
 	else {
-		// Perform movement based on the position clicked
+		// Check for valid moves based on the selected bead
 		if (isMoveRight(gridX, gridY, selectedCol, selectedRow)) {
 			moveRight(board, selectedRow, selectedCol, EMPTY, moveMade);
 		}
@@ -376,36 +442,30 @@ void handleSelectionAndMovement(int board[ROWS][COLS], int gridX, int gridY, int
 		else if (isMoveUp(gridX, gridY, selectedCol, selectedRow)) {
 			moveTop(board, selectedRow, selectedCol, EMPTY, moveMade);
 		}
-		// Diagonal movement checks
 		else if (isMoveUpperRight(gridX, gridY, selectedCol, selectedRow)) {
-			if ((selectedRow + selectedCol) % 2 == 0)
-				upperRight(board, selectedRow, selectedCol, EMPTY, moveMade);
+			upperRight(board, selectedRow, selectedCol, EMPTY, moveMade);
 		}
 		else if (isMoveUpperLeft(gridX, gridY, selectedCol, selectedRow)) {
-			if ((selectedRow + selectedCol) % 2 == 0)
-				upperLeft(board, selectedRow, selectedCol, EMPTY, moveMade);
+			upperLeft(board, selectedRow, selectedCol, EMPTY, moveMade);
 		}
 		else if (isMoveLowerRight(gridX, gridY, selectedCol, selectedRow)) {
-			if ((selectedRow + selectedCol) % 2 == 0)
-			    lowerRight(board, selectedRow, selectedCol, EMPTY, moveMade);
+			lowerRight(board, selectedRow, selectedCol, EMPTY, moveMade);
 		}
 		else if (isMoveLowerLeft(gridX, gridY, selectedCol, selectedRow)) {
-			if ((selectedRow + selectedCol) % 2 == 0)
-				lowerLeft(board, selectedRow, selectedCol, EMPTY, moveMade);
+			lowerLeft(board, selectedRow, selectedCol, EMPTY, moveMade);
 		}
-
 
 		// Reset selection
 		selectedRow = -1;
 		selectedCol = -1;
 
-		// Only switch turns if a valid move was made
+		// Switch turns if a valid move was made
 		if (moveMade) {
 			isPlayer1Turn = !isPlayer1Turn;
-			moveMade = false; // Reset for the next player's turn
+			moveMade = false;
 		}
 
-		// Reset original position for the next selection
+		// Reset original position
 		originalRow = -1;
 		originalCol = -1;
 	}

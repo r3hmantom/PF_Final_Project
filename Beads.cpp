@@ -66,7 +66,7 @@ void moveRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY, b
 	// If one position right is opposite player and two position right is empty
 	// then current position is moved to/with two position right and make one position to right empty and current position empty
 	if (curPosition[curR][curC + 1] == (curPosition[curR][curC] * -1) && curPosition[curR][curC + 2] == EMPTY) {
-		// moving current bead to 2 position left
+		// moving current bead to 2 position right
 		curPosition[curR][curC + 2] = curPosition[curR][curC];
 		// killing opposite person bead
 		curPosition[curR][curC + 1] = EMPTY;
