@@ -13,10 +13,11 @@ const int PLAYER1 = 1;
 const int PLAYER2 = -1;
 const int BEAD_PIC_SIZE = 150;
 const int BEAD_SIZE = BEAD_PIC_SIZE + 10;
-const int WINDOW_WIDTH = 1600;
+const int WINDOW_WIDTH = 1000;
 const int WINDOW_HEIGHT = 1000;
 const int BOARD_TOP_OFFSET = 100;
 const int BOARD_LEFT_OFFSET = 100;
+const int BOARD_IMG_OFFSET = 25;
 const int TURN_TOP_OFFSET = 10;
 const int TURN_LEFT_OFFSET = 400;
 
@@ -57,20 +58,20 @@ bool isMoveUp(int gridX, int gridY, int selectedCol, int selectedRow) {
 	return gridX == selectedCol && (gridY == selectedRow - 1 || gridY == selectedRow - 2);
 }
 bool isMoveUpperRight(int gridX, int gridY, int selectedCol, int selectedRow) {
-	return (gridX == selectedCol + 1 && gridY == selectedRow - 1) ||
-		(gridX == selectedCol + 2 && gridY == selectedRow - 2);
+	return((gridX == selectedCol + 1 && gridY == selectedRow - 1) ||
+		(gridX == selectedCol + 2 && gridY == selectedRow - 2)) && ((selectedRow + selectedCol) % 2 == 0);
 }
 bool isMoveUpperLeft(int gridX, int gridY, int selectedCol, int selectedRow) {
-	return (gridX == selectedCol - 1 && gridY == selectedRow - 1) ||
-		(gridX == selectedCol - 2 && gridY == selectedRow - 2);
+	return ((gridX == selectedCol - 1 && gridY == selectedRow - 1) ||
+		(gridX == selectedCol - 2 && gridY == selectedRow - 2)) && ((selectedRow + selectedCol) % 2 == 0);
 }
 bool isMoveLowerRight(int gridX, int gridY, int selectedCol, int selectedRow) {
-	return (gridX == selectedCol + 1 && gridY == selectedRow + 1) ||
-		(gridX == selectedCol + 2 && gridY == selectedRow + 2);
+	return ((gridX == selectedCol + 1 && gridY == selectedRow + 1) ||
+		(gridX == selectedCol + 2 && gridY == selectedRow + 2)) && ((selectedRow + selectedCol) % 2 == 0);
 }
 bool isMoveLowerLeft(int gridX, int gridY, int selectedCol, int selectedRow) {
-	return (gridX == selectedCol - 1 && gridY == selectedRow + 1) ||
-		(gridX == selectedCol - 2 && gridY == selectedRow + 2);
+	return ((gridX == selectedCol - 1 && gridY == selectedRow + 1) ||
+		(gridX == selectedCol - 2 && gridY == selectedRow + 2)) && ((selectedRow + selectedCol) % 2 == 0);
 }
 // -----------------
 void runGameLoop(sf::RenderWindow& window, GameState& gameState, sf::Sprite& beadSprite1, sf::Sprite& beadSprite2, sf::Sprite& boardSprite);
@@ -209,15 +210,6 @@ void showAndHandleMenu(sf::RenderWindow& window, bool& startGame, bool& exitGame
 	showMenu(window, startGame, exitGame, resumeGameSelected);
 	window.display();
 }
-
-
-
-
-
-
-
-
-
 void saveGameState(const GameState& state, const string& filename) {
 	ofstream file(filename, ios::binary);
 	if (file.is_open()) {
@@ -225,7 +217,6 @@ void saveGameState(const GameState& state, const string& filename) {
 	}
 	file.close();
 }
-
 bool loadGameState(GameState& state, const string& filename) {
 	ifstream file(filename, ios::binary);
 	if (file.is_open() && file.read(reinterpret_cast<char*>(&state), sizeof(GameState))) {
@@ -387,7 +378,8 @@ bool loadAndSetupBoard(sf::Sprite& boardSprite,sf::Texture& boardTexture) {
 		return false;
 	}
 	boardSprite.setTexture(boardTexture);
-	boardSprite.setPosition(BOARD_LEFT_OFFSET + 50, BOARD_TOP_OFFSET + 50);
+	//boardSprite.setPosition(BOARD_LEFT_OFFSET + 50, BOARD_TOP_OFFSET + 50);
+	boardSprite.setPosition(BOARD_LEFT_OFFSET + BOARD_IMG_OFFSET, BOARD_TOP_OFFSET + BOARD_IMG_OFFSET);
 	return true;
 }
 
@@ -413,7 +405,6 @@ void processInput(sf::RenderWindow& window, int board[ROWS][COLS], int& selected
 		}
 	}
 }
-
 void handleSelectionAndMovement(int board[ROWS][COLS], int gridX, int gridY, int& selectedRow, int& selectedCol, bool& isPlayer1Turn) {
 	static int originalRow = -1, originalCol = -1;
 	static bool moveMade = false; // Track if a valid move has been made
