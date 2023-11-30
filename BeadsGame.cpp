@@ -21,8 +21,8 @@ const int BOARD_IMG_OFFSET = 25;
 const int TURN_TOP_OFFSET = 50;
 const int TURN_LEFT_OFFSET = 400;
 const sf::Color TERMINAL_COLOR(209, 190, 160);  
-const sf::Color TEXT_COLOR_PLAYER_1(0, 190, 0);
-const sf::Color TEXT_COLOR_PLAYER_2(209, 0, 0);
+const sf::Color TEXT_COLOR_PLAYER_2(25 ,31, 202);
+const sf::Color TEXT_COLOR_PLAYER_1(216, 38, 55);
 const sf::Color TEXT_COLOR(0, 0, 0);
 
 
@@ -93,13 +93,17 @@ void displayWinningMessage(sf::RenderWindow& window, bool player1Won) {
 		return;
 	}
 
+	// Create a semi-transparent overlay
+	sf::RectangleShape overlay(sf::Vector2f(window.getSize().x, window.getSize().y));
+	overlay.setFillColor(sf::Color(0, 0, 0, 150)); // Black color with 150 alpha (semi-transparent)
+
 	sf::Text text;
 	text.setFont(font);
 	text.setString(player1Won ? "Player 1 Wins!" : "Player 2 Wins!");
-	text.setCharacterSize(50); // Increased size
+	text.setCharacterSize(140); // Increased size
 
 	if (player1Won) {
-	text.setFillColor(TEXT_COLOR_PLAYER_1);
+		text.setFillColor(TEXT_COLOR_PLAYER_1);
 	}
 	else {
 		text.setFillColor(TEXT_COLOR_PLAYER_2);
@@ -111,10 +115,13 @@ void displayWinningMessage(sf::RenderWindow& window, bool player1Won) {
 	// Center the text origin
 	text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
 	// Set the position of the text to be in the center of the window
-	text.setPosition(sf::Vector2f(window.getSize().x / 2.0f, window.getSize().y / 2.0f));
+	text.setPosition(sf::Vector2f(window.getSize().x / 2.0f, window.getSize().y / 2.0f - 50));
 
+	// Draw overlay first, then the text
+	window.draw(overlay);
 	window.draw(text);
 }
+
 bool checkForWin(const int board[ROWS][COLS], bool& player1Won) {
 	bool player1Exists = false;
 	bool player2Exists = false;
@@ -366,7 +373,7 @@ void runGameLoop(sf::RenderWindow& window, GameState& gameState, sf::Sprite& bea
 		drawBeads(window, beadSprite1, beadSprite2, gameState.board, selectedRow, selectedCol);
 
 		// Display player turn or winning message
-		if (!gameEnded) {
+		if (gameEnded) {
 			displayPlayerTurn(window, gameState.isPlayer1Turn);
 		}
 		else {
