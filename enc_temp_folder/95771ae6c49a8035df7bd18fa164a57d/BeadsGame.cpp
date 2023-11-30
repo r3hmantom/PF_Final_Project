@@ -21,8 +21,8 @@ const int BOARD_IMG_OFFSET = 25;
 const int TURN_TOP_OFFSET = 50;
 const int TURN_LEFT_OFFSET = 400;
 const sf::Color TERMINAL_COLOR(209, 190, 160);  
-const sf::Color TEXT_COLOR_PLAYER_1(25 ,31, 202);
-const sf::Color TEXT_COLOR_PLAYER_2(216, 38, 55);
+const sf::Color TEXT_COLOR_PLAYER_2(25 ,31, 202);
+const sf::Color TEXT_COLOR_PLAYER_1(216, 38, 55);
 const sf::Color TEXT_COLOR(0, 0, 0);
 
 
