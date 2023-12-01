@@ -1,268 +1,39 @@
-#include <iostream>
-using namespace std;
-
-// Default Variables
-const int defaultColsF = 5;
-
-// --------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------
-
-
-// BOARD FUNCTIONS
-
-// Initializing Board
-void initBoard(int board[][defaultColsF], int ROWS, int COLS, int PLAYER1, int PLAYER2, int EMPTY) {
-
-	// INITIALIZING PLAYER 1
-
-	// Initializing first two rows
-	for (int i = 0; i < COLS; i++) { // looping over all columns
-		for (int j = 0; j <= 1; j++) // looping over only first two rows
-			board[j][i] = PLAYER1;
-	}
-	// Initializing two columns on third row left
-	for (int i = 0; i < 2; i++) { // looping over two columns
-		for (int j = 2; j < 3; j++)
-			board[j][i] = PLAYER1;
-	}
-
-	board[2][2] = EMPTY;
-
-	// INITIALIZING PLAYER 2
-
-	// Initializing two columns on third row right
-	for (int i = 3; i < COLS; i++) {
-		for (int j = 2; j < 3; j++)
-			board[j][i] = PLAYER2;
-	}
-
-	// Initializing last two rows
-	for (int i = 0; i < COLS; i++)
-		for (int j = 3; j < ROWS; j++)
-			board[j][i] = PLAYER2;
+#include <SFML/Graphics.hpp>
+#include "constants.h"
+#include "utilities.h"
+	
+// Drawing Beads
+void drawBead(sf::RenderWindow& window, const sf::Sprite& sprite, int row, int col, int selectedRow, int selectedCol, float& rotationAngle, int horizontalOffset) {
+	sf::Sprite tempSprite = sprite; // Copy to modify position and rotation
+	tempSprite.setPosition(col * BEAD_SIZE + BEAD_SIZE / 2 + horizontalOffset, row * BEAD_SIZE + BEAD_SIZE / 2 + BOARD_TOP_OFFSET);
+	tempSprite.setRotation((row == selectedRow && col == selectedCol) ? (rotationAngle += 0.6f) : 0.0f);
+	window.draw(tempSprite);
 }
-// Displaying Board on console
-void displayBoard(int board[][defaultColsF], int ROWS, int COLS) {
+void drawBeads(sf::RenderWindow& window, const sf::Sprite& beadSprite1, const sf::Sprite& beadSprite2, int board[ROWS][COLS], int selectedRow, int selectedCol) {
+	static float rotationAngle = 0.0f;
+	// Calculate the total width of the bead layout
+	int totalBeadsWidth = COLS * BEAD_SIZE;
+	// Calculate the horizontal offset to center the beads
+	int horizontalOffset = (window.getSize().x - totalBeadsWidth) / 2;
+
+
 	for (int i = 0; i < ROWS; i++) {
 		for (int j = 0; j < COLS; j++) {
-			cout << board[i][j] << "\t";
+			if (board[i][j] == 0) continue;
+
+			const sf::Sprite& currentSprite = (board[i][j] == PLAYER1) ? beadSprite1 : beadSprite2;
+			drawBead(window, currentSprite, i, j, selectedRow, selectedCol, rotationAngle, horizontalOffset);
 		}
-		cout << endl;
 	}
 }
+bool loadAndSetupSprites(sf::Sprite& beadSprite1, sf::Sprite& beadSprite2, sf::Texture& beadTexture1, sf::Texture& beadTexture2) {
 
-// --------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------
-
-// MOVING BEADS IN AXIS
-
-// Right
-void moveRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY, bool& moveMade) {
-
-	// If one position right is opposite player and two position right is empty
-	// then current position is moved to/with two position right and make one position to right empty and current position empty
-	if (curPosition[curR][curC + 1] == (curPosition[curR][curC] * -1) && curPosition[curR][curC + 2] == EMPTY) {
-		// moving current bead to 2 position right
-		curPosition[curR][curC + 2] = curPosition[curR][curC];
-		// killing opposite person bead
-		curPosition[curR][curC + 1] = EMPTY;
-		// setting previous position to empty
-		curPosition[curR][curC] = EMPTY;
-		moveMade = true;
-		}
-
-	if (curPosition[curR][curC + 1] == EMPTY) {
-		// If right  position is empty, then make current position empty and move current position to +1 on right side
-		curPosition[curR][curC + 1] = curPosition[curR][curC];
-		curPosition[curR][curC] = EMPTY;
-		moveMade = true;
-		}
-
-
-
-}
-
-// Left
-void moveLeft(int curPosition[][defaultColsF], int curR, int curC, int EMPTY, bool& moveMade) {
-
-	// If one position left is opposite player and two position left is empty
-	// then current position is moved to/with two position left and make one position to left empty and current position empty
-	if (curPosition[curR][curC - 1] == (curPosition[curR][curC] * -1) && curPosition[curR][curC - 2] == EMPTY) {
-		// moving current bead to 2 position left
-		curPosition[curR][curC - 2] = curPosition[curR][curC];
-		// killing opposite person bead
-		curPosition[curR][curC - 1] = EMPTY;
-		// setting previous position to empty
-		curPosition[curR][curC] = EMPTY;
-		moveMade = true;
-		}
-
-
-	if (curPosition[curR][curC - 1] == EMPTY) {
-		// If left  position is empty, then make current position empty and move current position to 1 on left side
-		curPosition[curR][curC - 1] = curPosition[curR][curC];
-		curPosition[curR][curC] = EMPTY;
-		moveMade = true;
-		}
-
-}
-
-// Top
-void moveTop(int curPosition[][defaultColsF], int curR, int curC, int EMPTY, bool& moveMade) {
-
-	// If one position top is opposite player and two position top is empty
-	// then current position is moved to/with two position top and make one position to top empty and current position empty
-	if (curPosition[curR - 1][curC] == (curPosition[curR][curC] * -1) && curPosition[curR - 2][curC] == EMPTY) {
-		// moving current bead to 2 position top
-		curPosition[curR - 2][curC] = curPosition[curR][curC];
-		// killing opposite person bead
-		curPosition[curR - 1][curC] = EMPTY;
-		// setting previous position to empty
-		curPosition[curR][curC] = EMPTY;
-		moveMade = true;
-		}
-
-
-	if (curPosition[curR - 1][curC] == EMPTY) {
-		// If top position is empty, then make current position empty and move current position to 1 on top side
-		curPosition[curR - 1][curC] = curPosition[curR][curC];
-		curPosition[curR][curC] = EMPTY;
-		moveMade = true;
-		}
-
-}
-
-// Bottom
-void moveBottom(int curPosition[][defaultColsF], int curR, int curC, int EMPTY, bool& moveMade) {
-
-	// If one position bottom is opposite player and two position bottom is empty
-	// then current position is moved to/with two position bottom and make one position to bottom empty and current position empty
-	if (curPosition[curR + 1][curC] == (curPosition[curR][curC] * -1) && curPosition[curR + 2][curC] == EMPTY) {
-		// moving current bead to 2 position top
-		curPosition[curR + 2][curC] = curPosition[curR][curC];
-		// killing opposite person bead
-		curPosition[curR + 1][curC] = EMPTY;
-		// setting previous position to empty
-		curPosition[curR][curC] = EMPTY;
-		moveMade = true;
-		}
-
-
-
-
-	if (curPosition[curR + 1][curC] == EMPTY) {
-		// If bottom position is empty, then make current position empty and move current position to 1 on bottom side
-		curPosition[curR + 1][curC] = curPosition[curR][curC];
-		curPosition[curR][curC] = EMPTY;
-		moveMade = true;
-		}
-
-}
-
-// --------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------
-
-// MOVING BEADS DIAGONALLY
-
-// Upper Right
-void upperRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY, bool& moveMade) {
-
-	// If one position top right is opposite player and two position top right is empty
-	// then current position is moved to/with two position top and make one position to top empty and current position empty
-	if (curPosition[curR - 1][curC + 1] == (curPosition[curR][curC] * -1) && curPosition[curR - 2][curC + 2] == EMPTY) {
-		// moving current bead to 2 position top right
-		curPosition[curR - 2][curC + 2] = curPosition[curR][curC];
-		// killing opposite person bead
-		curPosition[curR - 1][curC + 1] = EMPTY;
-		// setting previous position to empty
-		curPosition[curR][curC] = EMPTY;
-		moveMade = true;
-		}
-
-	if (curPosition[curR - 1][curC + 1] == EMPTY) {
-		// If top right position is empty, then make current position empty and move current position to +1 on top right side
-		curPosition[curR - 1][curC + 1] = curPosition[curR][curC];
-		curPosition[curR][curC] = EMPTY;
-		moveMade = true;
-		}
-
-}
-
-// Upper Left
-void upperLeft(int curPosition[][defaultColsF], int curR, int curC, int EMPTY, bool& moveMade) {
-	// If one position top left is opposite player and two position top left is empty
-	// then current position is moved to/with two position top left and make one position to top left empty and current position empty
-	if (curPosition[curR - 1][curC - 1] == (curPosition[curR][curC] * -1) && curPosition[curR - 2][curC - 2] == EMPTY) {
-		// moving current bead to 2 position top
-		curPosition[curR - 2][curC - 2] = curPosition[curR][curC];
-		// killing opposite person bead
-		curPosition[curR - 1][curC - 1] = EMPTY;
-		// setting previous position to empty
-		curPosition[curR][curC] = EMPTY;
-		moveMade = true;
+	if (!loadTexture(beadTexture1, "bead1.png") || !loadTexture(beadTexture2, "bead2.png")) {
+		return false;
 	}
 
-	if (curPosition[curR - 1][curC - 1] == EMPTY) {
-		// If top left  position is empty, then make current position empty and move current position to +1 on top left side
-		curPosition[curR - 1][curC - 1] = curPosition[curR][curC];
-		curPosition[curR][curC] = EMPTY;
-		moveMade = true;
-		}
-
+	beadSprite1.setTexture(beadTexture1);
+	beadSprite2.setTexture(beadTexture2);
+	centerSpriteOrigins(beadSprite1, beadSprite2);
+	return true;
 }
-
-// Lower Right
-void lowerRight(int curPosition[][defaultColsF], int curR, int curC, int EMPTY, bool& moveMade) {
-
-	// If one position bottom right is opposite player and two bottom right is empty
-	// then current position is moved to/with two position bottom right and make one position to bottom right empty and current position empty
-	if (curPosition[curR + 1][curC + 1] == (curPosition[curR][curC] * -1) && curPosition[curR + 2][curC + 2] == EMPTY) {
-		// moving current bead to 2 bottom right
-		curPosition[curR + 2][curC + 2] = curPosition[curR][curC];
-		// killing opposite person bead
-		curPosition[curR + 1][curC + 1] = EMPTY;
-		// setting previous position to empty
-		curPosition[curR][curC] = EMPTY;
-		moveMade = true;
-	}
-
-	if (curPosition[curR + 1][curC + 1] == EMPTY) {
-		// If lower right  position is empty, then make current position empty and move current position to +1 on lower right side
-		curPosition[curR + 1][curC + 1] = curPosition[curR][curC];
-		curPosition[curR][curC] = EMPTY;
-		moveMade = true;
-	}
-
-}
-
-// Lower Left
-void lowerLeft(int curPosition[][defaultColsF], int curR, int curC, int EMPTY, bool& moveMade) {
-	// If one position lower left is opposite player and two position lower left is empty
-	if (curPosition[curR + 1][curC - 1] == (curPosition[curR][curC] * -1) && curPosition[curR + 2][curC - 2] == EMPTY) {
-		// moving current bead to 2 position lower left
-		curPosition[curR + 2][curC - 2] = curPosition[curR][curC];
-		// killing opposite person bead
-		curPosition[curR + 1][curC - 1] = EMPTY;
-		// setting previous position to empty
-		curPosition[curR][curC] = EMPTY;
-		moveMade = true;
-	}
-	else if (curPosition[curR + 1][curC - 1] == EMPTY) {
-		// If lower left position is empty, then move current position to lower left
-		curPosition[curR + 1][curC - 1] = curPosition[curR][curC];
-		curPosition[curR][curC] = EMPTY;
-		moveMade = true;
-	}
-}
-
-
-// --------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------

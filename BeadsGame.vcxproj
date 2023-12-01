@@ -133,11 +133,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Beads.cpp" />
+    <ClCompile Include="beads.cpp" />
+    <ClCompile Include="board.cpp" />
     <ClCompile Include="BeadsGame.cpp" />
+    <ClCompile Include="gameLoop.cpp" />
+    <ClCompile Include="inputs.cpp" />
+    <ClCompile Include="menu.cpp" />
+    <ClCompile Include="messsages.cpp" />
+    <ClCompile Include="utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Beads.h" />
+    <ClInclude Include="beads.h" />
+    <ClInclude Include="board.h" />
+    <ClInclude Include="constants.h" />
+    <ClInclude Include="gameLoop.h" />
+    <ClInclude Include="inputs.h" />
+    <ClInclude Include="menu.h" />
+    <ClInclude Include="messages.h" />
+    <ClInclude Include="utilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
