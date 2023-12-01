@@ -10,16 +10,17 @@ bool initializeWindow(sf::RenderWindow& window) {
 	// Get the desktop mode to determine the screen resolution
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 
-	// Create window with the desktop resolution
-	// sf::Style::Default allows the window to be resized and keeps the taskbar visible
-	window.create(sf::VideoMode(desktop.width, desktop.height), "12 Beads Game", sf::Style::Default);
+	// Create window with the desktop resolution and prevent resizing
+	// sf::Style::Titlebar | sf::Style::Close allows the window to have a title bar and close button, but not be resizable
+	window.create(sf::VideoMode(desktop.width, desktop.height), "12 Beads Game", sf::Style::Titlebar | sf::Style::Close);
 
-	// Maximize the window
+	// Position the window
 	window.setPosition(sf::Vector2i(0, 0));
-	window.setSize(sf::Vector2u(desktop.width, desktop.height));
 
 	return window.isOpen();
 }
+
+
 void runGameLoop(sf::RenderWindow& window, GameState& gameState, sf::Sprite& beadSprite1, sf::Sprite& beadSprite2, sf::Sprite& boardSprite) {
 	int selectedRow = -1, selectedCol = -1;
 	bool gameEnded = false;
