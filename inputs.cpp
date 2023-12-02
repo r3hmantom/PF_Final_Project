@@ -70,7 +70,7 @@ void processInput(sf::RenderWindow& window, int board[ROWS][COLS], int& selected
 	sf::Event event;
 	while (window.pollEvent(event)) {
 		if (event.type == sf::Event::Closed) {
-			saveGameState(gameState, "savegame.dat");  // Save game before closing
+			saveGameState(gameState, "savegame.dat" , false);  // Save game before closing
 			window.close();
 		}
 

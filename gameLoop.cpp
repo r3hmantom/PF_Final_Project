@@ -75,6 +75,7 @@ void runGameLoop(sf::RenderWindow& window, GameState& gameState, sf::Sprite& bea
 		}
 		else {
 			displayWinningMessage(window, player1Won);
+			saveGameState(gameState, "savegame.dat", true);
 			window.draw(backToMenuText);
 			sf::Event event;
 			while (window.pollEvent(event)) {

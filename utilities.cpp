@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include "constants.h"
+#include "board.h"
 
 using namespace std;
 
@@ -21,13 +22,29 @@ void centerSpriteOrigins(sf::Sprite& sprite1, sf::Sprite& sprite2) {
 
 
 // file handling
-void saveGameState(const GameState& state, const string& filename) {
+void saveGameState(const GameState& state, const string& filename, bool saveEmptyState = false) {
+
 	ofstream file(filename, ios::binary);
-	if (file.is_open()) {
+	if (!file.is_open()) {
+		cerr << "Error opening file for saving game state." << endl;
+		return;
+	}
+
+	if (saveEmptyState) {
+		// Create an empty or initial game state
+		GameState emptyState;
+		initBoard(emptyState.board); // Assuming initBoard initializes the board to a default state
+		emptyState.IS_PLAYER1_TURN = true; // Assuming the game starts with player 1's turn
+		file.write(reinterpret_cast<const char*>(&emptyState), sizeof(GameState));
+	}
+	else {
+		// Save the current game state
 		file.write(reinterpret_cast<const char*>(&state), sizeof(GameState));
 	}
+
 	file.close();
 }
+
 bool loadGameState(GameState& state, const string& filename) {
 	ifstream file(filename, ios::binary);
 	if (file.is_open() && file.read(reinterpret_cast<char*>(&state), sizeof(GameState))) {
