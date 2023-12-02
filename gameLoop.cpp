@@ -5,6 +5,7 @@
 #include "beads.h"
 #include "board.h"
 #include "messages.h"
+#include "menu.h"
 
 bool initializeWindow(sf::RenderWindow& window) {
 	// Get the desktop mode to determine the screen resolution
@@ -29,6 +30,19 @@ void runGameLoop(sf::RenderWindow& window, GameState& gameState, sf::Sprite& bea
 	int totalBeadsWidth = COLS * BEAD_SIZE;
 	// Calculate the horizontal offset to center the beads
 	int horizontalOffset = (window.getSize().x - totalBeadsWidth) / 2;
+
+	sf::Font font;
+	if (!font.loadFromFile("font.ttf")) {
+		cerr << "Error loading font" << endl;
+		return;
+	}
+	sf::Text backToMenuText;
+	backToMenuText.setFont(font);
+	backToMenuText.setString("Back to Main Menu");
+	backToMenuText.setCharacterSize(140); // Increased size
+	backToMenuText.setFillColor(sf::Color::White);
+	backToMenuText.setStyle(sf::Text::Bold); // Making the text bold
+
 
 
 	while (window.isOpen()) {
@@ -55,6 +69,20 @@ void runGameLoop(sf::RenderWindow& window, GameState& gameState, sf::Sprite& bea
 		}
 		else {
 			displayWinningMessage(window, player1Won);
+			window.draw(backToMenuText);
+			sf::Event event;
+			while (window.pollEvent(event)) {
+				if (event.type == sf::Event::Closed) {
+					window.close();
+				}
+
+				// Handle clicks on 'Back to Menu' text
+				if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+					if (isMouseOverText(window, backToMenuText)) {
+						return; // Return to main menu
+					}
+				}
+			}
 		}
 
 		// Display the window contents
