@@ -39,9 +39,15 @@ void runGameLoop(sf::RenderWindow& window, GameState& gameState, sf::Sprite& bea
 	sf::Text backToMenuText;
 	backToMenuText.setFont(font);
 	backToMenuText.setString("Back to Main Menu");
-	backToMenuText.setCharacterSize(140); // Increased size
+	backToMenuText.setCharacterSize(90); // Increased size
 	backToMenuText.setFillColor(sf::Color::White);
 	backToMenuText.setStyle(sf::Text::Bold); // Making the text bold
+	// centering it
+	sf::Vector2u windowSize = window.getSize();
+	sf::FloatRect textRect = backToMenuText.getLocalBounds();
+	backToMenuText.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+	backToMenuText.setPosition(sf::Vector2f(windowSize.x / 2.0f, windowSize.y / 2.0f + 100));
+
 
 
 
