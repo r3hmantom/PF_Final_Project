@@ -39,6 +39,7 @@ const string  PLAYER_2_TURN_TEXT = "Player 2's Turn";
 const string START_GAME_TEXT = "Start Game";
 const string RESUME_GAME_TEXT = "Resume Game";
 const string EXIT_GAME_TEXT = "Exit Game";
+const string GAME_TITLE = "12 Beads Game";
 
 
 // Colors

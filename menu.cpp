@@ -96,6 +96,8 @@ void handleMenuInput(sf::RenderWindow& window, const sf::Event& event, sf::Text 
     }
 }
 void showAndHandleMenu(sf::RenderWindow& window, bool& startGame, bool& exitGame, bool& resumeGameSelected) {
+
+
     sf::Text menuTexts[MENU_ITEM_COUNT];
 
     bool menuActive = true; // Flag to indicate if the menu is active
@@ -149,7 +151,22 @@ void showAndHandleMenu(sf::RenderWindow& window, bool& startGame, bool& exitGame
     if (menuActive) {
         window.clear();
         showMenu(window, menuTexts);
+        sf::Font font;
+        if (!font.loadFromFile("assets/font.ttf")) {
+            cerr << "Error loading from file " << endl;
+        }
+
+        sf::Text title;
+        title.setFont(font);
+        title.setString(GAME_TITLE);
+        title.setCharacterSize(140);
+        title.setStyle(sf::Text::Bold);
+        title.setFillColor(TEXT_COLOR_BROWN);
+        title.setPosition(sf::Vector2f(window.getSize().x / 4.0f, 20));
+        window.draw(title);
+
         window.display();
+
     }
 \
 }
