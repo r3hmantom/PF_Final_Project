@@ -168,5 +168,4 @@ void showAndHandleMenu(sf::RenderWindow& window, bool& startGame, bool& exitGame
         window.display();
 
     }
-\
 }
