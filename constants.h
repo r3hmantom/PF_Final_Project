@@ -36,9 +36,9 @@ const string  PLAYER_2_NAME_TEXT = "Player 2";
 const string  PLAYER_2_TURN_TEXT = "Player 2's Turn";
 
 
-const string START_GAME_TEXT = "hqhq Game";
-const string RESUME_GAME_TEXT = "Reshqhqume Game";
-const string EXIT_GAME_TEXT = "q Game";
+const string START_GAME_TEXT = "Start Game";
+const string RESUME_GAME_TEXT = "Resume Game";
+const string EXIT_GAME_TEXT = "Exit Game";
 
 
 // Colors
@@ -46,5 +46,6 @@ const sf::Color TERMINAL_COLOR(209, 190, 160);
 const sf::Color TEXT_COLOR_PLAYER_1(25, 31, 202);
 const sf::Color TEXT_COLOR_PLAYER_2(216, 38, 55);
 const sf::Color TEXT_COLOR(0, 0, 0);
+const sf::Color TEXT_COLOR_BROWN(59, 55, 43);
 
 #endif // CONSTANTS_H

@@ -103,8 +103,6 @@ void showAndHandleMenu(sf::RenderWindow& window, bool& startGame, bool& exitGame
     float verticalSpacing = 100.0f;  // Vertical spacing between menu items
     float startY = window.getSize().y / 2.0f - verticalSpacing * (MENU_ITEM_COUNT / 2.0f);
 
-    
-
     for (int i = 0; i < MENU_ITEM_COUNT; ++i) {
         menuTexts[i] = createMenuItemText(window, MENU_TEXTS[i], startY + i * verticalSpacing);
     }
