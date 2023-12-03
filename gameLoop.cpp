@@ -32,7 +32,7 @@ void runGameLoop(sf::RenderWindow& window, GameState& gameState, sf::Sprite& bea
 	int horizontalOffset = (window.getSize().x - totalBeadsWidth) / 2;
 
 	sf::Font font;
-	if (!font.loadFromFile("font.ttf")) {
+	if (!font.loadFromFile("assets/font.ttf")) {
 		cerr << "Error loading font" << endl;
 		return;
 	}

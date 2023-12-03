@@ -5,7 +5,7 @@ using namespace std;
 
 void displayWinningMessage(sf::RenderWindow& window, bool player1Won) {
 	sf::Font font;
-	if (!font.loadFromFile("font.ttf")) {
+	if (!font.loadFromFile("assets/font.ttf")) {
 		cerr << "Error loading font" << endl;
 		return;
 	}
@@ -40,7 +40,7 @@ void displayWinningMessage(sf::RenderWindow& window, bool player1Won) {
 }
 void displayPlayerTurn(sf::RenderWindow& window, bool IS_PLAYER1_TURN) {
 	sf::Font font;
-	if (!font.loadFromFile("font.ttf")) {
+	if (!font.loadFromFile("assets/font.ttf")) {
 		cerr << "Error loading font" << endl;
 		return;
 	}

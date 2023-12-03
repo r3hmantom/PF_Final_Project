@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Audio.cpp" />
     <ClCompile Include="beads.cpp" />
     <ClCompile Include="board.cpp" />
     <ClCompile Include="BeadsGame.cpp" />
@@ -143,6 +144,7 @@
     <ClCompile Include="utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Audio.h" />
     <ClInclude Include="beads.h" />
     <ClInclude Include="board.h" />
     <ClInclude Include="constants.h" />

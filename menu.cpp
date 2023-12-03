@@ -13,7 +13,7 @@ sf::Font font;
 
 
 sf::Text createMenuItemText(const sf::RenderWindow& window, const string& text, float verticalOffset) {
-    if (!font.loadFromFile("font.ttf")) {
+    if (!font.loadFromFile("assets/font.ttf")) {
         cerr << "Error loading font" << endl;
     }
     sf::Text menuItemText;

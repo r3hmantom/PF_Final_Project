@@ -1,0 +1,2 @@
+void playMoveSound();
+void playKillSound();

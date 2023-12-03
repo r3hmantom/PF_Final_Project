@@ -1,8 +1,10 @@
 #include <iostream>
 #include "constants.h"
 #include "utilities.h"
+#include "Audio.h"
 
 using namespace std;
+
 
 
 // --------------------------------------------------------------------------------------
@@ -61,6 +63,7 @@ void displayBoard(int board[][COLS]) {
 
 // MOVING BEADS IN AXIS
 
+
 // Right
 void moveRight(int curPosition[][COLS], int curR, int curC, bool& moveMade) {
 
@@ -74,13 +77,15 @@ void moveRight(int curPosition[][COLS], int curR, int curC, bool& moveMade) {
 		// setting previous position to empty
 		curPosition[curR][curC] = EMPTY;
 		moveMade = true;
-		}
+		playKillSound();
+	}
 
 	if (curPosition[curR][curC + 1] == EMPTY) {
 		// If right  position is empty, then make current position empty and move current position to +1 on right side
 		curPosition[curR][curC + 1] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
 		moveMade = true;
+		playMoveSound();
 		}
 
 
@@ -100,6 +105,8 @@ void moveLeft(int curPosition[][COLS], int curR, int curC, bool& moveMade) {
 		// setting previous position to empty
 		curPosition[curR][curC] = EMPTY;
 		moveMade = true;
+		playKillSound();
+
 		}
 
 
@@ -108,6 +115,7 @@ void moveLeft(int curPosition[][COLS], int curR, int curC, bool& moveMade) {
 		curPosition[curR][curC - 1] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
 		moveMade = true;
+		playMoveSound();
 		}
 
 }
@@ -125,6 +133,8 @@ void moveTop(int curPosition[][COLS], int curR, int curC, bool& moveMade) {
 		// setting previous position to empty
 		curPosition[curR][curC] = EMPTY;
 		moveMade = true;
+		playKillSound();
+
 		}
 
 
@@ -133,6 +143,7 @@ void moveTop(int curPosition[][COLS], int curR, int curC, bool& moveMade) {
 		curPosition[curR - 1][curC] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
 		moveMade = true;
+		playMoveSound();
 		}
 
 }
@@ -150,6 +161,8 @@ void moveBottom(int curPosition[][COLS], int curR, int curC, bool& moveMade) {
 		// setting previous position to empty
 		curPosition[curR][curC] = EMPTY;
 		moveMade = true;
+		playKillSound();
+
 		}
 
 
@@ -160,6 +173,7 @@ void moveBottom(int curPosition[][COLS], int curR, int curC, bool& moveMade) {
 		curPosition[curR + 1][curC] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
 		moveMade = true;
+		playMoveSound();
 		}
 
 }
@@ -184,6 +198,8 @@ void upperRight(int curPosition[][COLS], int curR, int curC,  bool& moveMade) {
 		// setting previous position to empty
 		curPosition[curR][curC] = EMPTY;
 		moveMade = true;
+		playKillSound();
+
 		}
 
 	if (curPosition[curR - 1][curC + 1] == EMPTY) {
@@ -191,6 +207,7 @@ void upperRight(int curPosition[][COLS], int curR, int curC,  bool& moveMade) {
 		curPosition[curR - 1][curC + 1] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
 		moveMade = true;
+		playMoveSound();
 		}
 
 }
@@ -207,6 +224,8 @@ void upperLeft(int curPosition[][COLS], int curR, int curC,  bool& moveMade) {
 		// setting previous position to empty
 		curPosition[curR][curC] = EMPTY;
 		moveMade = true;
+		playKillSound();
+
 	}
 
 	if (curPosition[curR - 1][curC - 1] == EMPTY) {
@@ -214,6 +233,7 @@ void upperLeft(int curPosition[][COLS], int curR, int curC,  bool& moveMade) {
 		curPosition[curR - 1][curC - 1] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
 		moveMade = true;
+		playMoveSound();
 		}
 
 }
@@ -231,6 +251,8 @@ void lowerRight(int curPosition[][COLS], int curR, int curC, bool& moveMade) {
 		// setting previous position to empty
 		curPosition[curR][curC] = EMPTY;
 		moveMade = true;
+		playKillSound();
+
 	}
 
 	if (curPosition[curR + 1][curC + 1] == EMPTY) {
@@ -238,6 +260,7 @@ void lowerRight(int curPosition[][COLS], int curR, int curC, bool& moveMade) {
 		curPosition[curR + 1][curC + 1] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
 		moveMade = true;
+		playMoveSound();
 	}
 
 }
@@ -253,12 +276,15 @@ void lowerLeft(int curPosition[][COLS], int curR, int curC,  bool& moveMade) {
 		// setting previous position to empty
 		curPosition[curR][curC] = EMPTY;
 		moveMade = true;
+		playKillSound();
+
 	}
 	else if (curPosition[curR + 1][curC - 1] == EMPTY) {
 		// If lower left position is empty, then move current position to lower left
 		curPosition[curR + 1][curC - 1] = curPosition[curR][curC];
 		curPosition[curR][curC] = EMPTY;
 		moveMade = true;
+		playMoveSound();
 	}
 }
 
@@ -308,7 +334,7 @@ bool isMoveLowerLeft(int gridX, int gridY, int selectedCol, int selectedRow) {
 // BOARD GUI
 
 bool loadAndSetupBoard(sf::Sprite& boardSprite, sf::Texture& boardTexture, sf::RenderWindow& window) {
-	if (!loadTexture(boardTexture, "board.png")) {
+	if (!loadTexture(boardTexture, "assets/board.png")) {
 		cerr << "Error loading board texture" << endl;
 		return false;
 	}

@@ -28,7 +28,7 @@ void drawBeads(sf::RenderWindow& window, const sf::Sprite& beadSprite1, const sf
 }
 bool loadAndSetupSprites(sf::Sprite& beadSprite1, sf::Sprite& beadSprite2, sf::Texture& beadTexture1, sf::Texture& beadTexture2) {
 
-	if (!loadTexture(beadTexture1, "bead1.png") || !loadTexture(beadTexture2, "bead2.png")) {
+	if (!loadTexture(beadTexture1, "assets/bead1.png") || !loadTexture(beadTexture2, "assets/bead2.png")) {
 		return false;
 	}
 
