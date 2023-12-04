@@ -1,6 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
+#include <ctime>
 #include "constants.h"
 #include "board.h"
 
@@ -34,7 +36,8 @@ void saveGameState(const GameState& state, const string& filename, bool saveEmpt
 		// Create an empty or initial game state
 		GameState emptyState;
 		initBoard(emptyState.board); // Assuming initBoard initializes the board to a default state
-		emptyState.IS_PLAYER1_TURN = true; // Assuming the game starts with player 1's turn
+		std::srand(std::time(nullptr));
+		emptyState.IS_PLAYER1_TURN = std::rand() % 2 == 0;
 		file.write(reinterpret_cast<const char*>(&emptyState), sizeof(GameState));
 	}
 	else {
