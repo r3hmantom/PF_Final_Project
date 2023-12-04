@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 #include <fstream>
 #include <SFML/Graphics.hpp>
 #include "constants.h"
@@ -55,11 +57,12 @@ int main() {
             showAndHandleMenu(window, startGame, exitGame, resumeGameSelected);
         }
 
-        // Initialize a New Game if Required
         if (startGame) {
             initBoard(gameState.board);
-            gameState.IS_PLAYER1_TURN = true;
+            std::srand(std::time(nullptr));
+            gameState.IS_PLAYER1_TURN = std::rand() % 2 == 0;
         }
+
 
         // Resume Game Logic
         else if (resumeGameSelected) {
