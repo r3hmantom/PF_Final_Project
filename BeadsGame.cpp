@@ -68,8 +68,8 @@ int main() {
         else if (resumeGameSelected) {
             if (!loadGameState(gameState, "savegame.dat")) {
                 // No saved game found or error reading file, start a new game
-                initBoard(gameState.board);
-                gameState.IS_PLAYER1_TURN = true;
+                std::srand(std::time(nullptr));
+                gameState.IS_PLAYER1_TURN = std::rand() % 2 == 0;
             }
         }
 
