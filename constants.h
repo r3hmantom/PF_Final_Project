@@ -44,8 +44,8 @@ const string GAME_TITLE = "12 Beads Game";
 
 // Colors
 const sf::Color TERMINAL_COLOR(209, 190, 160);
-const sf::Color TEXT_COLOR_PLAYER_1(25, 31, 202);
-const sf::Color TEXT_COLOR_PLAYER_2(216, 38, 55);
+const sf::Color TEXT_COLOR_PLAYER_1(0, 80, 226);
+const sf::Color TEXT_COLOR_PLAYER_2(163, 41, 52);
 const sf::Color TEXT_COLOR(0, 0, 0);
 const sf::Color TEXT_COLOR_BROWN(59, 55, 43);
 

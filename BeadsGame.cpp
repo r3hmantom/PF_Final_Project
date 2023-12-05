@@ -72,7 +72,7 @@ int main() {
                 gameState.IS_PLAYER1_TURN = std::rand() % 2 == 0;
             }
         }
-
+        displayWinningMessage(window, true);
         // Exit Game Logic
         if (exitGame) {
             break; // Exit the outer while loop to close the game
