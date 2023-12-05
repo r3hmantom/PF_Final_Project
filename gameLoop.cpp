@@ -83,7 +83,7 @@ void runGameLoop(sf::RenderWindow& window, GameState& gameState, sf::Sprite& bea
 					window.close();
 				}
 
-				// Handle clicks on 'Back to Menu' text
+				// 'Back to Menu' text
 				if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
 					if (isMouseOverText(window, backToMenuText)) {
 						return; // Return to main menu
