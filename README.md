@@ -25,12 +25,13 @@ Players take turns moving their beads, aiming to eliminate their opponent's bead
 ## Build and Run Instructions
 To compile and run "12 Beads," ensure that SFML is correctly set up in your Visual Studio environment. Follow these steps:
 1. Clone the repository from GitHub.
-2. Open the project in Visual Studio.
-3. Build the project using the build options in Visual Studio.
-4. Run the executable generated.
+2. Setup [SFML](https://www.sfml-dev.org/tutorials/2.6/start-vc.php) in Visual Studio.
+3. Open the project in Visual Studio.
+4. Build the project using the build options in Visual Studio.
+5. Run the executable generated.
 
 ## Dependencies
-- SFML Library
+- [SFML Library](https://www.sfml-dev.org/tutorials/2.6/start-vc.php)
 
 ## Screenshots
 **Main Menu:** <br>
